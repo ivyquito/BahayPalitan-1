@@ -4,6 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class user_page_travelplan extends CI_Controller {
 	public function __construct() {
         parent::__construct();
+
+        $this->load->model('system_model');
+
         if($this->session->userdata('sub')!=''){
 				redirect(base_url().'user_page_renew');
 				exit();
@@ -380,6 +383,117 @@ class user_page_travelplan extends CI_Controller {
 		$this->load->view('user_view_page_travelplanrecord');
 		$this->load->view('includes/footer2');
 		
+	}
+
+
+	/*
+		AUTHOR : MICHAEL QUIETA
+	*/
+
+	public function addNewTravelPlan()
+	{
+		extract($_POST);
+
+		$data['user_info'] = $user_info = $this->session->userdata('user_info');
+
+		$check = $this->system_model->get_all('locations', '*', array('latitude' => $lat, 'longitude' => $lng));
+
+		if(!empty($check))
+		{
+			// if exist get locID
+			foreach ($check as $row)
+			{
+				$locID = $row->locID;
+			}
+		}
+		else
+		{
+			// insert new location and get locID
+			$this->system_model->addData('locations', array('cityName' => $loc, 'latitude' => $lat, 'longitude' => $lng, 'status' => 'active'));
+			$locID = $this->system_model->last_insert_id();
+		}
+
+
+		$param = array(
+			'PStartDate' 	=> date('Y-m-d', strtotime($stdate)),
+			'PEndDate' 		=> date('Y-m-d', strtotime($nddate)),
+			'GoogleAddr' 	=> $loc,
+			'PMaxGuests' 	=> $maxgst,
+			'PAmenities' 	=> $aments,
+			'Lat' 			=> $lat,
+			'Long' 			=> $lng,
+			'subID' 		=> $user_info->subID,
+			'locID' 		=> $locID
+			);
+
+		
+		$sql = $this->system_model->addData('travel_plan', $param);
+
+		if($sql)
+		{
+			echo $this->system_model->jsonret(true, 'New Travel Plan successfully added!');
+		}
+		else
+		{
+			echo $this->system_model->jsonret(false, 'An error occured!');	
+		}
+	}
+
+
+	public function editNewTravelPlan()
+	{
+		extract($_POST);
+
+		$data['user_info'] = $user_info = $this->session->userdata('user_info');
+
+		$check = $this->system_model->get_all('locations', '*', array('latitude' => $lat, 'longitude' => $lng));
+
+		if(!empty($check))
+		{
+			// if exist get locID
+			foreach ($check as $row)
+			{
+				$locID = $row->locID;
+			}
+		}
+		else
+		{
+			// insert new location and get locID
+			$this->system_model->addData('locations', array('cityName' => $loc, 'latitude' => $lat, 'longitude' => $lng, 'status' => 'active'));
+			$locID = $this->system_model->last_insert_id();
+		}
+
+		$param = array(
+			'PStartDate' 	=> date('Y-m-d', strtotime($stdate)),
+			'PEndDate' 		=> date('Y-m-d', strtotime($nddate)),
+			'GoogleAddr' 	=> $loc,
+			'PMaxGuests' 	=> $maxgst,
+			'PAmenities' 	=> $aments,
+			'Lat' 			=> $lat,
+			'Long' 			=> $lng,
+			'locID' 		=> $locID
+			);
+
+		$sql = $this->system_model->updateData('travel_plan', $param, array('TravelPlanID' => $planID));
+
+		if($sql)
+		{
+			echo $this->system_model->jsonret(true, 'Travel Plan has been successfully updated!');
+		}
+		else
+		{
+			echo $this->system_model->jsonret(false, 'An error occured!');	
+		}
+	}
+
+
+	public function pullTravelPlan()
+	{
+		$data['user_info'] = $user_info = $this->session->userdata('user_info');
+
+		$sql = $this->system_model->get_all('travel_plan', '*', array('subID' => $user_info->subID));
+
+		echo json_encode($sql);
 	}
 	
 }

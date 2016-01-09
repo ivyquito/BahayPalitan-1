@@ -9,43 +9,70 @@
                         </div>
                         <!-- .panel-heading -->
                         <div class="panel-body" style="min-height:300px">
-                            <form action="<?php echo base_url(); ?>user_page_travelplan/addNew" class="form-signin" method="post" accept-charset="utf-8">
-                            <fieldset>
-                            <div class="form-group">
-                                    <p class="err"><?php echo (isset($error) ? $error : '');?></p>
+
+
+
+
+                    <div class="map_canvas" id='map_canvas' style="width: 100%; height: 180px;"></div>
+
+                    <form>
+                        <fieldset hidden>
+                            <label>Latitude</label>
+                            <input name="lat" id='lat' type="text" value="">
+                          
+                            <label>Longitude</label>
+                            <input name="lng" id='lng' type="text" value="">
+                          
+                            <label>Formatted Address</label>
+                            <input name="formatted_address" id='f_address' type="text" value="">
+                        </fieldset>
+                    </form>
+
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <label>Start Date</label>
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" id='startdate'>
+                                        <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-calendar"></i>
+                                        </span>
+                                    </div>
+
+                                    <br />
+
+                                    <label>Location</label>
+                                    <input id="geocomplete" type="text" class="form-control input-sm" placeholder="Type in an address" value="Philippines">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>End Date</label>
+                                    <div class="input-group date">
+                                        <input type="text" class="form-control" id='enddate'>
+                                        <span class="input-group-addon">
+                                          <i class="glyphicon glyphicon-calendar"></i>
+                                        </span>
+                                    </div>
+
+                                    <br />
+
+                                    <label>Max Guest</label>
+                                    <input type="text" class="form-control" id='maxguest'>
+                                </div>
                             </div>
-                            <div class="form-group col-lg-6">
-                                <label>Start Date</label>
-                                <input type="date" name="startdate" class="form-control" value="<?php echo (isset($_POST['startdate']) ? $_POST['startdate'] : ''); ?>" required>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <label>End Date</label>
-                                <input type="date" name="enddate" class="form-control" value="<?php echo (isset($_POST['enddate']) ? $_POST['enddate'] : ''); ?>" required>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <label>Location</label>
-                                <select class="form-control" name="location" required>
-                                <option value=""></option>
-                                <?php foreach($loc as $row):?>
-                                    <option value="<?php echo $row->locID ?>" <?php echo (isset($_POST['location']) && $_POST['location'] == $row->locID ? 'selected' : ''); ?>><?php echo $row->cityName ?></option>
-                                <?php endforeach; ?>
-                                </select>
-                            </div>
-                           <div class="form-group col-lg-6">
-                                <label>Max Guest</label>
-                                <input type="text" name="maxguest" class="form-control" value="<?php echo (isset($_POST['maxguest']) ? $_POST['maxguest'] : ''); ?>" required>
-                            </div>
-                             <div class="form-group col-lg-12">
-                                <label>Amenities</label>
-                                <input type="text" name="amenities" class="form-control" value="<?php echo (isset($_POST['amenities']) ? $_POST['amenities'] : ''); ?>" required>
-                            </div>
-                            <div class=" col-lg-6 col-md-offset-5">
-                                <br>
-                                <input type="submit" name="add_new_travel_plan" class="btn btn-primary" id="" value="Save">
+
+                            <br />
+
+                            <label>Amenities</label>
+                            <input type="text" class="form-control" id='amenities'>
+
+                            <br />
+
+                            <center>
+                                <button class="btn btn-primary" id='btnTravelPlanSave'>Save</button>
                                 <a href="<?php echo base_url().'user_page_travelplan'?>" class="btn btn-primary">Back</a>
-                            </div>
-                            </fieldset>
-                            </form>
+                            </center>
                         </div>
                         <!-- .panel-body -->
 						</div>			
@@ -53,3 +80,120 @@
 				</div>
 		</div>
     </div>
+
+
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+    <script src="<?php echo base_url();?>assets/js/jquery.geocomplete.js"></script>
+
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+    //DISPLAY DEFAULT LOCATION
+
+    var latlng = new google.maps.LatLng('10.3156992', '123.88543660000005');
+    var myOptions = {
+        zoom: 15,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    geocoder = new google.maps.Geocoder();
+
+    var marker = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        title: "Hello World!"
+    });
+});
+
+
+    $('#btnTravelPlanSave').on('click', function()
+        {
+            var startdate       = $('#startdate').val(),
+                location        = $('#f_address').val(),
+                enddate         = $('#enddate').val(),
+                maxguest        = $('#maxguest').val(),
+                amenities       = $('#amenities').val(),
+                lat             = $('#lat').val(),
+                lng             = $('#lng').val(),
+                errMsg          = '';
+
+            if(startdate == '') { errMsg += 'Start Date is required'; }
+            if(enddate == '')   { errMsg += '\nEnd Date is required'; }
+            if(location == '')  { errMsg += '\nLocation is required'; }
+            if(maxguest == '')  { errMsg += '\nPlease Indicate Max Guest'; }
+
+            if(errMsg == '')
+            {
+
+                $.ajax({
+                   type: "POST",
+                   dataType: "json",
+                   data: {
+                            stdate  : $.trim(startdate),
+                            nddate  : $.trim(enddate),
+                            loc     : $.trim(location),
+                            maxgst  : $.trim(maxguest),
+                            aments  : $.trim(amenities),
+                            lat     : $.trim(lat),
+                            lng     : $.trim(lng)
+                         },
+                   url: '<?php echo site_url("user_page_travelplan/addNewTravelPlan"); ?>',
+                   success: function(json){
+                        if(json.success)
+                        {
+                            alert(json.message);
+                            window.location.href = '<?php echo base_url(); ?>user_page_travelplan/addNew/';
+                        }
+                   }
+                });
+
+            }
+            else
+            {
+                alert(errMsg);
+            }
+        });
+
+    $('.input-group.date').datepicker({
+    format: "mm/dd/yyyy",
+    //startDate: "2012-01-01",
+    //endDate: "2015-01-01",
+    todayBtn: "linked",
+    autoclose: true,
+    todayHighlight: true
+    });
+
+
+
+    /* GOOGLE MAP JQUERY GEO MAPPING */
+
+  $(function(){
+    $("#geocomplete").geocomplete({
+      map: ".map_canvas",
+      details: "form ",
+      markerOptions: {
+        draggable: true
+      }
+    });
+    
+    $("#geocomplete").bind("geocode:dragged", function(event, latLng){
+      $("input[name=lat]").val(latLng.lat());
+      $("input[name=lng]").val(latLng.lng());
+      $("#reset").show();
+    });
+    
+    
+    $("#reset").click(function(){
+      $("#geocomplete").geocomplete("resetMarker");
+      $("#reset").hide();
+      return false;
+    });
+    
+    $("#find").click(function(){
+      $("#geocomplete").trigger("geocode");
+    }).click();
+  });
+</script>

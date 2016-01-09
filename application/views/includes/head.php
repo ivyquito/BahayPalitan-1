@@ -29,6 +29,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Custom CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/creative.css" type="text/css">
     <link rel="stylesheet" href="<?php echo base_url();?>assets/css/main.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/datepicker.min.css" type="text/css">
+
+    <!-- FULL CALENDAR mic quieta-->
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/fullcalendar.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/css/fullcalendar.print.css" type="text/css" media="print">
+
+    
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -38,6 +47,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     
     <!-- jQuery -->
     <script src="<?php echo base_url();?>assets/js/jquery.js"></script>
+    <script src="<?php echo base_url();?>assets/js/bootstrap-datepicker.js"></script>
+
+    <script src="<?php echo base_url();?>assets/js/moment.min.js"></script>
+    <script src="<?php echo base_url();?>assets/js/fullcalendar.min.js"></script>
 </head>
 
 <body id="page-top">
