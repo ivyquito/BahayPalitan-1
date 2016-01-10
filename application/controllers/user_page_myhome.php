@@ -24,76 +24,100 @@ class user_page_myhome extends CI_Controller {
 		$data['user_info'] = $user_info = $this->session->userdata('user_info');
 		
 			if(isset($_POST['savehome'])){
-				$image 			= $_FILES['image'];
-				$locID 			= trim($this->input->post('locID'));
-				$areaType 		= trim($this->input->post('areaType'));
-				$houseType 		= trim($this->input->post('houseType'));
-				$HomePostType	= trim($this->input->post('homePostType'));
-				$amenities 		= trim($this->input->post('amenities'));
-				$maxGuests 		= trim($this->input->post('maxGuests'));
-				$checking 		= false;
-				
+				$locationData = array(
+						"countryID"		 => 	1,
+						"cityName"		 => 	$this->input->post('formatted_address'),
+						"latitude"		 => 	$this->input->post('lat'),
+						"longitude"		 => 	$this->input->post('lng'),
+						"status"		 => 	'active'
+					);
 
-				// if(!empty($ownerID) && !empty($areaType) && !empty($houseType) && !empty($image) && !empty($locID) && !empty($amenities) && !empty($maxGuests) && !empty($swapStatus) && !empty($dealNeg) && !empty($cancelledNeg))
-				if($areaType != "" && $houseType != "" && $image != "" && $locID != "" && $amenities != "" && $maxGuests != "")
-				{	
-					$checking = true;
-				}else{
+				$insertLocation = $this->common->addLocation($locationData);
+				if($insertLocation == "success")
+				{
+					$getLoc = $this->common->getLastRowLocation();
+					$locID = $getLoc->locID;
+
+					// $locID 			= trim($this->input->post('locID'));
+					$image 			= $_FILES['image'];
+					$areaType 		= trim($this->input->post('areaType'));
+					$houseType 		= trim($this->input->post('houseType'));
+					$HomePostType	= trim($this->input->post('homePostType'));
+					$amenities 		= trim($this->input->post('amenities'));
+					$maxGuests 		= trim($this->input->post('maxGuests'));
+					$checking 		= false;
 					
-					$data['error'] =  'Please Fill up all Fields..';
-				}
-				if(!is_numeric($maxGuests)){
-					$checking = false;
-					$data['error'] =  'Max Guests field is not number..';
-				}
-				if($checking == true){
-					$target_dir 	= "uploads/";
-					$target_file 	= $target_dir . basename($_FILES["image"]["name"]);
-					$imageFileType 	= pathinfo($target_file,PATHINFO_EXTENSION);
-					$newname 		= 'home'.$user_info->subID.'_'.date('Ymdhis');
-					$uploadtarget 	= $target_dir . $newname .'.'.$imageFileType;
 
-					//$dir = '/uploads/';				
-					//$path = $dir.'main_'.$user_info->subID.date('Y-m-i');
-					//$path = $dir.$image['name'];
-					move_uploaded_file($image['tmp_name'], $uploadtarget);
-
-					$newdata = array(
-						'ownerID'	=> $user_info->subID, 
-						'ATypeID'	=> $areaType, 
-						'HTypeID'	=> $houseType, 
-						'locID'		=> $locID, 
-						'photos'	=> $newname.'.'.$imageFileType, 
-						'amenities'	=> $amenities, 
-						'maxGuests'	=> $maxGuests, 
-						'swapStatus'=> 'ACTIVE', 
-						'homePostType'=> $HomePostType, 
-						'dealNegotiation'=> 0, 
-						'cancelledNegotiation'=> 0
-						);
-					$solud = $this->common->add_and_get_id('homes',$newdata);
-					if($this->common->getrow('travel_plan', array('subID'=>$user_info->subID))){
-						$update['swapStatus'] = 'ACTIVE';
-						$wr['homeID'] 	= $solud->homeID;
-						$wr['ownerID'] 	= $user_info->subID;
-						$this->common->change('homes', $update, $wr);
+					// if(!empty($ownerID) && !empty($areaType) && !empty($houseType) && !empty($image) && !empty($locID) && !empty($amenities) && !empty($maxGuests) && !empty($swapStatus) && !empty($dealNeg) && !empty($cancelledNeg))
+					if($areaType != "" && $houseType != "" && $image != "" && $locID != "" && $amenities != "" && $maxGuests != "")
+					{	
+						$checking = true;
+					}else{
+						
+						$data['error'] =  'Please Fill up all Fields..';
 					}
-					unset($_POST);
-					
-					if($solud){
+					if(!is_numeric($maxGuests)){
+						$checking = false;
+						$data['error'] =  'Max Guests field is not number..';
+					}
+					if($checking == true){
+						$target_dir 	= "uploads/";
+						$target_file 	= $target_dir . basename($_FILES["image"]["name"]);
+						$imageFileType 	= pathinfo($target_file,PATHINFO_EXTENSION);
+						$newname 		= 'home'.$user_info->subID.'_'.date('Ymdhis');
+						$uploadtarget 	= $target_dir . $newname .'.'.$imageFileType;
+
+						//$dir = '/uploads/';				
+						//$path = $dir.'main_'.$user_info->subID.date('Y-m-i');
+						//$path = $dir.$image['name'];
+						move_uploaded_file($image['tmp_name'], $uploadtarget);
+
+						$newdata = array(
+							'ownerID'	=> $user_info->subID, 
+							'ATypeID'	=> $areaType, 
+							'HTypeID'	=> $houseType, 
+							'locID'		=> $locID, 
+							'photos'	=> $newname.'.'.$imageFileType, 
+							'amenities'	=> $amenities, 
+							'maxGuests'	=> $maxGuests, 
+							'swapStatus'=> 'ACTIVE', 
+							'homePostType'=> $HomePostType, 
+							'dealNegotiation'=> 0, 
+							'cancelledNegotiation'=> 0
+							);
+						$solud = $this->common->add_and_get_id('homes',$newdata);
 						if($this->common->getrow('travel_plan', array('subID'=>$user_info->subID))){
-							$this->session->set_flashdata('success', 'Home successfully added.');
-							redirect(base_url().'user_page_myhome');
-							exit;
-						}else{
-							$this->session->set_flashdata('success', 'You can now add your travel plan.');
-							redirect(base_url().'user_page_travelplan');
-							exit;
+							$update['swapStatus'] = 'ACTIVE';
+							$wr['homeID'] 	= $solud->homeID;
+							$wr['ownerID'] 	= $user_info->subID;
+							$this->common->change('homes', $update, $wr);
+						}
+						unset($_POST);
+						
+						if($solud){
+							if($this->common->getrow('travel_plan', array('subID'=>$user_info->subID))){
+								$this->session->set_flashdata('success', 'Home successfully added.');
+								redirect(base_url().'user_page_myhome');
+								exit;
+							}else{
+								$this->session->set_flashdata('success', 'You can now add your travel plan.');
+								redirect(base_url().'user_page_travelplan');
+								exit;
+							}
 						}
 					}
+
+				}
+				else
+				{
+					echo "<script>
+							alert('Fail to insert location.');
+						</script>";
 				}
 
-			}	
+
+			}
+			
 		
 		$uid = $user_info->subID;
 		$check = $this->common->getall('homes',array('ownerID'=>$uid));
@@ -386,24 +410,41 @@ class user_page_myhome extends CI_Controller {
 
 		$check 	= $this->common->getrow('homes',array('ownerID'=>$uid,'homeID' =>$num));
 		if($check){
-			$locID 			= trim($this->input->post('locID'));
-			$areaType 		= trim($this->input->post('areaType'));
-			$houseType 		= trim($this->input->post('houseType'));
-			$amenities 		= trim($this->input->post('amenities'));
-			$maxGuests 		= trim($this->input->post('maxGuests'));
-			if(empty($locID) || empty($areaType) || empty($houseType) || empty($amenities) || empty($maxGuests)){
-				$this->session->set_flashdata('error','Emtpy Field(s)...');
+			$locID = $this->input->post('locationId');
+			$locationData = array(
+					"cityName"			=> $this->input->post('formatted_address'),
+					"latitude"			=> $this->input->post('lat'),
+					"longitude"			=> $this->input->post('lng')
+				);
+			$upLocation = $this->common->updateLocation($locID,$locationData);
+
+			if($upLocation == "success")
+			{
+				// $locID 			= trim($this->input->post('locID'));
+				$areaType 		= trim($this->input->post('areaType'));
+				$houseType 		= trim($this->input->post('houseType'));
+				$amenities 		= trim($this->input->post('amenities'));
+				$maxGuests 		= trim($this->input->post('maxGuests'));
+				if(empty($locID) || empty($areaType) || empty($houseType) || empty($amenities) || empty($maxGuests)){
+					$this->session->set_flashdata('error','Emtpy Field(s)...');
+				}
+				else{
+					$update = array(
+						'locID'		=> $locID,
+						'ATypeID'	=> $areaType,
+						'HTypeID'	=> $houseType,
+						'amenities'	=> $amenities,
+						'maxGuests'	=> $maxGuests,
+						);
+					$this->common->change('homes',$update,array('ownerID'=>$uid,'homeID' =>$num));
+					redirect(base_url().'user_page_myhome/myhome/'.$num);
+				}
 			}
-			else{
-				$update = array(
-					'locID'		=> $locID,
-					'ATypeID'	=> $areaType,
-					'HTypeID'	=> $houseType,
-					'amenities'	=> $amenities,
-					'maxGuests'	=> $maxGuests,
-					);
-				$this->common->change('homes',$update,array('ownerID'=>$uid,'homeID' =>$num));
-				redirect(base_url().'user_page_myhome/myhome/'.$num);
+			else
+			{
+				echo "<script>
+					alert('false');
+				</script>";
 			}
 		}else{
 			redirect(base_url().'user_page_myhome');

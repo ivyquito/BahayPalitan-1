@@ -323,6 +323,42 @@ class common extends CI_Model {
 		$query = $this->db->get('homes');
 		return  $query->result();
 	}
+	
+	function addLocation($data)
+	{
+		$query = $this->db->insert('locations',$data);
+
+		if($query)
+		{
+			return "success";
+		}
+		else
+		{
+			return "fail";
+		}
+	}
+
+	function getLastRowLocation()
+	{
+		$this->db->select_max('locID');
+		$query = $this->db->get('locations');
+
+		return $query->row();
+	}
+
+	function updateLocation($id, $data)
+	{
+		$query = $this->db->update('locations', $data, array('locID' => $id));
+
+		if($query)
+		{
+			return "success";
+		}
+		else
+		{
+			return "fail";
+		}
+	}
 }
 
 ?>
