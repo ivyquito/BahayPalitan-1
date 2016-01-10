@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.3.11
+-- version 4.1.14
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2015 at 04:42 PM
--- Server version: 5.6.24
--- PHP Version: 5.6.8
+-- Generation Time: Jan 10, 2016 at 05:10 PM
+-- Server version: 5.6.17
+-- PHP Version: 5.5.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -27,11 +27,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `abuse_reports` (
-  `reportID` int(11) NOT NULL,
+  `reportID` int(11) NOT NULL AUTO_INCREMENT,
   `fromuser` int(11) NOT NULL,
   `homeID` int(11) NOT NULL,
-  `date_reported` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  `date_reported` datetime NOT NULL,
+  PRIMARY KEY (`reportID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `abuse_reports`
@@ -48,7 +49,7 @@ INSERT INTO `abuse_reports` (`reportID`, `fromuser`, `homeID`, `date_reported`) 
 --
 
 CREATE TABLE IF NOT EXISTS `admin` (
-  `adminID` int(8) NOT NULL,
+  `adminID` int(8) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `admin_firstname` varchar(100) DEFAULT NULL,
@@ -63,8 +64,9 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `admin_modified_ip` varchar(100) DEFAULT NULL,
   `admin_flag` tinyint(4) DEFAULT NULL,
   `last_login` datetime DEFAULT NULL,
-  `last_logout` datetime DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  `last_logout` datetime DEFAULT NULL,
+  PRIMARY KEY (`adminID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `admin`
@@ -82,14 +84,15 @@ INSERT INTO `admin` (`adminID`, `username`, `password`, `admin_firstname`, `admi
 --
 
 CREATE TABLE IF NOT EXISTS `area_type` (
-  `ATypeID` int(8) NOT NULL,
+  `ATypeID` int(8) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_date` datetime NOT NULL,
   `modified_date` datetime NOT NULL,
   `created_ip` varchar(30) NOT NULL,
-  `modified_ip` varchar(30) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `modified_ip` varchar(30) NOT NULL,
+  PRIMARY KEY (`ATypeID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `area_type`
@@ -109,10 +112,11 @@ INSERT INTO `area_type` (`ATypeID`, `description`, `created_by`, `created_date`,
 --
 
 CREATE TABLE IF NOT EXISTS `country` (
-  `countryID` int(8) NOT NULL,
+  `countryID` int(8) NOT NULL AUTO_INCREMENT,
   `countryName` varchar(255) NOT NULL,
-  `status` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+  `status` varchar(255) NOT NULL,
+  PRIMARY KEY (`countryID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `country`
@@ -132,7 +136,7 @@ INSERT INTO `country` (`countryID`, `countryName`, `status`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `homes` (
-  `homeID` int(8) NOT NULL,
+  `homeID` int(8) NOT NULL AUTO_INCREMENT,
   `ownerID` int(8) NOT NULL,
   `ATypeID` int(8) NOT NULL,
   `HTypeID` int(8) NOT NULL,
@@ -143,8 +147,13 @@ CREATE TABLE IF NOT EXISTS `homes` (
   `swapStatus` varchar(10) NOT NULL,
   `homePostType` varchar(100) NOT NULL,
   `dealNegotiation` varchar(255) NOT NULL,
-  `cancelledNegotiation` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `cancelledNegotiation` varchar(255) NOT NULL,
+  PRIMARY KEY (`homeID`),
+  KEY `ownerID` (`ownerID`),
+  KEY `ATypeID` (`ATypeID`),
+  KEY `HTypeID` (`HTypeID`),
+  KEY `locID` (`locID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `homes`
@@ -156,7 +165,8 @@ INSERT INTO `homes` (`homeID`, `ownerID`, `ATypeID`, `HTypeID`, `locID`, `photos
 (3, 3, 6, 1, 2, 'home3_20150926035633.jpg', '2 refrigerator\r\n4 cable TV''s\r\nWiFi with 5mbps\r\n3 rooms', 5, 'ACTIVE', 'Home', '0', '0'),
 (4, 4, 6, 4, 4, 'home4_20150926035459.jpg', '2 rooms \r\n1 CR\r\nsecured with CCTV''s\r\nwith music room', 5, 'ACTIVE', 'Home', '3', '0'),
 (5, 5, 1, 6, 1, 'home5_20150926035836.jpg', '2 CR, one with hot and cold\r\n3 LED TV''s\r\nWiFi with 5mbps\r\nwith semi GYM', 7, 'ACTIVE', 'Home', '0', '0'),
-(6, 1, 1, 1, 8, 'home1_20151201060256.jpg', 'ikaduhang balay ni John Carlo', 10, 'ACTIVE', 'Home', '0', '0');
+(6, 1, 1, 1, 8, 'home1_20151201060256.jpg', 'ikaduhang balay ni John Carlo', 10, 'ACTIVE', 'Home', '0', '0'),
+(7, 6, 2, 3, 2, 'home6_20160109030717.png', 'naay CR sa ubos.. nya ang swimming pool pwd libangan', 1500, 'ACTIVE', 'Home', '0', '0');
 
 -- --------------------------------------------------------
 
@@ -165,13 +175,14 @@ INSERT INTO `homes` (`homeID`, `ownerID`, `ATypeID`, `HTypeID`, `locID`, `photos
 --
 
 CREATE TABLE IF NOT EXISTS `home_swap` (
-  `swap_id` int(11) NOT NULL,
+  `swap_id` int(11) NOT NULL AUTO_INCREMENT,
   `swap_home` int(11) NOT NULL,
   `swap_home_to` int(11) NOT NULL,
   `action` varchar(155) NOT NULL,
   `waiting_to` int(11) NOT NULL,
-  `date_swapped` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `date_swapped` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`swap_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `home_swap`
@@ -187,14 +198,15 @@ INSERT INTO `home_swap` (`swap_id`, `swap_home`, `swap_home_to`, `action`, `wait
 --
 
 CREATE TABLE IF NOT EXISTS `house_type` (
-  `HTypeID` int(8) NOT NULL,
+  `HTypeID` int(8) NOT NULL AUTO_INCREMENT,
   `description` varchar(255) NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_date` datetime NOT NULL,
   `modified_date` datetime NOT NULL,
   `created_ip` varchar(30) NOT NULL,
-  `modified_ip` varchar(30) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `modified_ip` varchar(30) NOT NULL,
+  PRIMARY KEY (`HTypeID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `house_type`
@@ -214,13 +226,15 @@ INSERT INTO `house_type` (`HTypeID`, `description`, `created_by`, `created_date`
 --
 
 CREATE TABLE IF NOT EXISTS `locations` (
-  `locID` int(8) NOT NULL,
+  `locID` int(8) NOT NULL AUTO_INCREMENT,
   `countryID` int(8) NOT NULL,
   `cityName` varchar(255) NOT NULL,
   `latitude` varchar(255) NOT NULL,
   `longitude` varchar(255) NOT NULL,
-  `status` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=latin1;
+  `status` varchar(255) NOT NULL,
+  PRIMARY KEY (`locID`),
+  KEY `INDEX` (`countryID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=92 ;
 
 --
 -- Dumping data for table `locations`
@@ -311,7 +325,12 @@ INSERT INTO `locations` (`locID`, `countryID`, `cityName`, `latitude`, `longitud
 (83, 0, 'Valencia', '39.4667', '0.3833', 'active'),
 (84, 0, 'Valenzuela City', '14.7000', '120.9800', 'active'),
 (85, 0, 'Vigan City', '17.5667', '120.3833', 'active'),
-(86, 0, 'Zamboanga City', '6.9167', '122.0833', 'active');
+(86, 0, 'Zamboanga City', '6.9167', '122.0833', 'active'),
+(87, 0, 'Antipolo, 1870 Rizal, Philippines', '14.6254827', '121.12448470000004', 'active'),
+(88, 0, 'Cebu City, 6000 Cebu, Philippines', '10.3156992', '123.88543660000005', 'active'),
+(89, 0, 'Camotes Rd, Cebu City, Cebu, Philippines', '10.3158987', '123.90958739999996', 'active'),
+(90, 0, 'Tisa Basketball Gym, Cebu City, Cebu, Philippines', '10.3005414', '123.87064809999993', 'active'),
+(91, 0, 'Lagtang, Talisay City, Cebu, Philippines', '10.2700868', '123.83135960000004', 'active');
 
 -- --------------------------------------------------------
 
@@ -320,20 +339,22 @@ INSERT INTO `locations` (`locID`, `countryID`, `cityName`, `latitude`, `longitud
 --
 
 CREATE TABLE IF NOT EXISTS `messages` (
-  `msgId` int(11) NOT NULL,
+  `msgId` int(11) NOT NULL AUTO_INCREMENT,
   `toID` int(11) NOT NULL,
   `fromID` int(11) NOT NULL,
   `content` text NOT NULL,
   `sendDate` datetime NOT NULL,
-  `mstatus` int(2) NOT NULL COMMENT '1-not read | 0-read '
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  `mstatus` int(2) NOT NULL COMMENT '1-not read | 0-read ',
+  PRIMARY KEY (`msgId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `messages`
 --
 
 INSERT INTO `messages` (`msgId`, `toID`, `fromID`, `content`, `sendDate`, `mstatus`) VALUES
-(2, 2, 1, 'I like your homes and for me it''s a perfect place', '2015-09-26 05:12:48', 0);
+(2, 2, 1, 'I like your homes and for me it''s a perfect place', '2015-09-26 05:12:48', 0),
+(3, 1, 6, 'Hi..', '2016-01-07 03:48:37', 1);
 
 -- --------------------------------------------------------
 
@@ -342,10 +363,11 @@ INSERT INTO `messages` (`msgId`, `toID`, `fromID`, `content`, `sendDate`, `mstat
 --
 
 CREATE TABLE IF NOT EXISTS `more_photos` (
-  `imageID` int(11) NOT NULL,
+  `imageID` int(11) NOT NULL AUTO_INCREMENT,
   `homeID` int(11) NOT NULL,
-  `image` varchar(155) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+  `image` varchar(155) NOT NULL,
+  PRIMARY KEY (`imageID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `more_photos`
@@ -364,13 +386,14 @@ INSERT INTO `more_photos` (`imageID`, `homeID`, `image`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `notification` (
-  `notie_id` int(11) NOT NULL,
+  `notie_id` int(11) NOT NULL AUTO_INCREMENT,
   `from_user` int(11) NOT NULL,
   `to_user` int(11) NOT NULL,
   `content` text NOT NULL,
   `date` datetime NOT NULL,
-  `nstatus` int(10) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  `nstatus` int(10) NOT NULL,
+  PRIMARY KEY (`notie_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `notification`
@@ -388,7 +411,7 @@ INSERT INTO `notification` (`notie_id`, `from_user`, `to_user`, `content`, `date
 --
 
 CREATE TABLE IF NOT EXISTS `payment_info` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `subID` int(11) NOT NULL,
   `card` varchar(25) NOT NULL,
   `card_number` int(60) NOT NULL,
@@ -398,8 +421,9 @@ CREATE TABLE IF NOT EXISTS `payment_info` (
   `card_street` varchar(300) NOT NULL,
   `card_city` varchar(155) NOT NULL,
   `card_province` varchar(155) NOT NULL,
-  `card_zipcode` varchar(15) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `card_zipcode` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `payment_info`
@@ -420,11 +444,12 @@ INSERT INTO `payment_info` (`id`, `subID`, `card`, `card_number`, `card_cvv`, `c
 --
 
 CREATE TABLE IF NOT EXISTS `payment_records` (
-  `payment_id` int(11) NOT NULL,
+  `payment_id` int(11) NOT NULL AUTO_INCREMENT,
   `from_id` int(11) NOT NULL,
   `value` varchar(15) NOT NULL,
-  `pay_date` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `pay_date` datetime NOT NULL,
+  PRIMARY KEY (`payment_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `payment_records`
@@ -440,7 +465,7 @@ INSERT INTO `payment_records` (`payment_id`, `from_id`, `value`, `pay_date`) VAL
 --
 
 CREATE TABLE IF NOT EXISTS `plans` (
-  `planID` int(8) NOT NULL,
+  `planID` int(8) NOT NULL AUTO_INCREMENT,
   `planName` varchar(255) NOT NULL,
   `planDesc` varchar(255) NOT NULL,
   `planAmount` varchar(255) NOT NULL COMMENT 'value in US dollar',
@@ -449,8 +474,9 @@ CREATE TABLE IF NOT EXISTS `plans` (
   `plan_created_date` datetime NOT NULL,
   `plan_modified_date` datetime NOT NULL,
   `plan_created_ip` varchar(30) NOT NULL,
-  `plan_modified_ip` varchar(30) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `plan_modified_ip` varchar(30) NOT NULL,
+  PRIMARY KEY (`planID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `plans`
@@ -493,7 +519,7 @@ CREATE TABLE IF NOT EXISTS `ratings_reviews` (
 --
 
 CREATE TABLE IF NOT EXISTS `subscribers` (
-  `subID` int(8) NOT NULL,
+  `subID` int(8) NOT NULL AUTO_INCREMENT,
   `profilepic` varchar(255) DEFAULT '0.jpg',
   `lname` varchar(255) NOT NULL,
   `fname` varchar(255) NOT NULL,
@@ -507,8 +533,9 @@ CREATE TABLE IF NOT EXISTS `subscribers` (
   `status` int(1) NOT NULL DEFAULT '1' COMMENT '0 - inactive / 1 - active',
   `planID` int(11) NOT NULL,
   `planEnd` datetime NOT NULL,
-  `started` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `started` datetime NOT NULL,
+  PRIMARY KEY (`subID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `subscribers`
@@ -529,26 +556,30 @@ INSERT INTO `subscribers` (`subID`, `profilepic`, `lname`, `fname`, `mname`, `ge
 --
 
 CREATE TABLE IF NOT EXISTS `travel_plan` (
-  `TravelPlanID` int(8) NOT NULL,
+  `TravelPlanID` int(8) NOT NULL AUTO_INCREMENT,
   `PAmenities` varchar(255) NOT NULL,
   `PMaxGuests` int(11) NOT NULL,
   `PStartDate` date NOT NULL,
   `PEndDate` date NOT NULL,
   `locID` int(8) NOT NULL,
-  `subID` int(8) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+  `subID` int(8) NOT NULL,
+  `Lat` varchar(100) NOT NULL COMMENT 'google latitude',
+  `Long` varchar(100) NOT NULL COMMENT 'google longitude',
+  `GoogleAddr` varchar(100) NOT NULL COMMENT 'google address',
+  PRIMARY KEY (`TravelPlanID`),
+  KEY `subID` (`subID`),
+  KEY `locID` (`locID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `travel_plan`
 --
 
-INSERT INTO `travel_plan` (`TravelPlanID`, `PAmenities`, `PMaxGuests`, `PStartDate`, `PEndDate`, `locID`, `subID`) VALUES
-(1, 'first balay ni John Carlosssssssss', 10, '2016-02-02', '2016-03-02', 4, 1),
-(2, 'air conditioned room and WiFi', 5, '2015-11-25', '2015-12-25', 2, 2),
-(3, 'should have airconditioned rooms', 5, '2015-10-25', '2015-11-25', 1, 3),
-(4, 'should have refrigerator...1 airconditioned room...WiFi if  possible', 5, '2015-11-25', '2015-12-25', 2, 4),
-(5, 'airconditioned room is enough', 5, '2015-10-25', '2015-11-25', 4, 5),
-(6, 'try try lng bah', 10, '2016-02-02', '2016-03-02', 4, 1);
+INSERT INTO `travel_plan` (`TravelPlanID`, `PAmenities`, `PMaxGuests`, `PStartDate`, `PEndDate`, `locID`, `subID`, `Lat`, `Long`, `GoogleAddr`) VALUES
+(1, 'amoang balay', 8, '2016-01-08', '2016-01-08', 87, 6, '14.6254827', '121.12448470000004', 'Antipolo, 1870 Rizal, Philippines'),
+(2, '', 9, '2016-01-13', '2016-01-15', 89, 6, '10.3158987', '123.90958739999996', 'Camotes Rd, Cebu City, Cebu, Philippines'),
+(3, '', 14, '2016-01-20', '2016-01-22', 90, 6, '10.3005414', '123.87064809999993', 'Tisa Basketball Gym, Cebu City, Cebu, Philippines'),
+(4, '', 50, '2016-01-28', '2016-01-30', 91, 6, '10.2700868', '123.83135960000004', 'Lagtang, Talisay City, Cebu, Philippines');
 
 -- --------------------------------------------------------
 
@@ -557,14 +588,15 @@ INSERT INTO `travel_plan` (`TravelPlanID`, `PAmenities`, `PMaxGuests`, `PStartDa
 --
 
 CREATE TABLE IF NOT EXISTS `travel_records` (
-  `tr_id` int(11) NOT NULL,
+  `tr_id` int(11) NOT NULL AUTO_INCREMENT,
   `tr_amenities` text NOT NULL,
   `tr_maxGuests` int(11) NOT NULL,
   `tr_startDate` datetime NOT NULL,
   `tr_pEndDate` datetime NOT NULL,
   `tr_locID` int(11) NOT NULL,
-  `tr_subID` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  `tr_subID` int(11) NOT NULL,
+  PRIMARY KEY (`tr_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `travel_records`
@@ -574,201 +606,6 @@ INSERT INTO `travel_records` (`tr_id`, `tr_amenities`, `tr_maxGuests`, `tr_start
 (1, 'rooms with TV''s and air conditioned', 5, '2015-11-25 00:00:00', '2015-12-25 00:00:00', 4, 1),
 (2, 'air conditioned room and WiFi', 5, '2015-11-25 00:00:00', '2015-12-25 00:00:00', 2, 2);
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `abuse_reports`
---
-ALTER TABLE `abuse_reports`
-  ADD PRIMARY KEY (`reportID`);
-
---
--- Indexes for table `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`adminID`);
-
---
--- Indexes for table `area_type`
---
-ALTER TABLE `area_type`
-  ADD PRIMARY KEY (`ATypeID`);
-
---
--- Indexes for table `country`
---
-ALTER TABLE `country`
-  ADD PRIMARY KEY (`countryID`);
-
---
--- Indexes for table `homes`
---
-ALTER TABLE `homes`
-  ADD PRIMARY KEY (`homeID`), ADD KEY `ownerID` (`ownerID`), ADD KEY `ATypeID` (`ATypeID`), ADD KEY `HTypeID` (`HTypeID`), ADD KEY `locID` (`locID`);
-
---
--- Indexes for table `home_swap`
---
-ALTER TABLE `home_swap`
-  ADD PRIMARY KEY (`swap_id`);
-
---
--- Indexes for table `house_type`
---
-ALTER TABLE `house_type`
-  ADD PRIMARY KEY (`HTypeID`);
-
---
--- Indexes for table `locations`
---
-ALTER TABLE `locations`
-  ADD PRIMARY KEY (`locID`), ADD KEY `INDEX` (`countryID`);
-
---
--- Indexes for table `messages`
---
-ALTER TABLE `messages`
-  ADD PRIMARY KEY (`msgId`);
-
---
--- Indexes for table `more_photos`
---
-ALTER TABLE `more_photos`
-  ADD PRIMARY KEY (`imageID`);
-
---
--- Indexes for table `notification`
---
-ALTER TABLE `notification`
-  ADD PRIMARY KEY (`notie_id`);
-
---
--- Indexes for table `payment_info`
---
-ALTER TABLE `payment_info`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `payment_records`
---
-ALTER TABLE `payment_records`
-  ADD PRIMARY KEY (`payment_id`);
-
---
--- Indexes for table `plans`
---
-ALTER TABLE `plans`
-  ADD PRIMARY KEY (`planID`);
-
---
--- Indexes for table `subscribers`
---
-ALTER TABLE `subscribers`
-  ADD PRIMARY KEY (`subID`);
-
---
--- Indexes for table `travel_plan`
---
-ALTER TABLE `travel_plan`
-  ADD PRIMARY KEY (`TravelPlanID`), ADD KEY `subID` (`subID`), ADD KEY `locID` (`locID`);
-
---
--- Indexes for table `travel_records`
---
-ALTER TABLE `travel_records`
-  ADD PRIMARY KEY (`tr_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `abuse_reports`
---
-ALTER TABLE `abuse_reports`
-  MODIFY `reportID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT for table `admin`
---
-ALTER TABLE `admin`
-  MODIFY `adminID` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `area_type`
---
-ALTER TABLE `area_type`
-  MODIFY `ATypeID` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `country`
---
-ALTER TABLE `country`
-  MODIFY `countryID` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT for table `homes`
---
-ALTER TABLE `homes`
-  MODIFY `homeID` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `home_swap`
---
-ALTER TABLE `home_swap`
-  MODIFY `swap_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `house_type`
---
-ALTER TABLE `house_type`
-  MODIFY `HTypeID` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `locations`
---
-ALTER TABLE `locations`
-  MODIFY `locID` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=87;
---
--- AUTO_INCREMENT for table `messages`
---
-ALTER TABLE `messages`
-  MODIFY `msgId` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `more_photos`
---
-ALTER TABLE `more_photos`
-  MODIFY `imageID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT for table `notification`
---
-ALTER TABLE `notification`
-  MODIFY `notie_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `payment_info`
---
-ALTER TABLE `payment_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `payment_records`
---
-ALTER TABLE `payment_records`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `plans`
---
-ALTER TABLE `plans`
-  MODIFY `planID` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `subscribers`
---
-ALTER TABLE `subscribers`
-  MODIFY `subID` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `travel_plan`
---
-ALTER TABLE `travel_plan`
-  MODIFY `TravelPlanID` int(8) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `travel_records`
---
-ALTER TABLE `travel_records`
-  MODIFY `tr_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
