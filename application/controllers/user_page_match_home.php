@@ -20,8 +20,8 @@ class user_page_match_home extends CI_Controller {
 	function index(){
 		$data['user_info'] 	= $user_info = $this->session->userdata('user_info');
 		$uid = $user_info->subID;
-		$myplan = $this->common->getrow('travel_plan',array('subID'=>$user_info->subID));
-		if(!$myplan){
+		$myplan = $this->common->getrow2('travel_plan',array('subID'=>$user_info->subID));
+		if(empty($myplan)){
 			$this->session->set_flashdata('error','Set your travel plan first before viewing match home.');
 			redirect(base_url().'user_page_travelplan');
 			exit();
@@ -31,31 +31,51 @@ class user_page_match_home extends CI_Controller {
 			$gr[] = $value->locID;
 		}
 		
-		$where 	= 	"homes.ownerID <> ".$uid." AND homes.locID = ".$myplan->locID." AND homes.swapStatus ='ACTIVE'".
-					"AND (travel_plan.PStartDate = '".$myplan->PStartDate."'".
-					"AND travel_plan.PEndDate <= '".$myplan->PEndDate."')".
-					"AND homes.maxGuests >= ".$myplan->PMaxGuests;
+		// $where 	= 	"homes.ownerID <> ".$uid." AND homes.locID = ".$myplan->locID." AND homes.swapStatus ='ACTIVE'".
+		// 			"AND (travel_plan.PStartDate = '".$myplan->PStartDate."'".
+		// 			"AND travel_plan.PEndDate <= '".$myplan->PEndDate."')".
+		// 			"AND homes.maxGuests >= ".$myplan->PMaxGuests;
 
 					//"AND (travel_plan.PStartDate BETWEEN '".$myplan->PStartDate."' AND '".$myplan->PEndDate."')".
 					//"AND (travel_plan.PEndDate BETWEEN '".$myplan->PStartDate."' AND '".$myplan->PEndDate."')";
 					//"AND homes.maxGuests = ".$myplan->PMaxGuests;
-		$compare = $this->common->match_home($where);
+		//$compare = $this->common->match_home($where);
 		//echo count($compare);
 		$in = array();
 		$haystack = array();
 
-		foreach($compare as $out){
-			$true = false;
-			$kani = $this->common->getrow('travel_plan', array('subID' => $out->subID));
-			foreach($myhomes as $akongbalay){
-				if($kani->locID == $akongbalay->locID && $kani->PMaxGuests <= $akongbalay->maxGuests){
-					$true = true;
-				}
-			}
-			if($true == true){
-				$haystack[] = $out;
-			}
+		foreach($myplan as $plan){
+			$fetch = $this->common->filterMatch($uid,$plan->PStartDate,$plan->PEndDate);
+			if(!empty($fetch))
+				$listMatch[] = $fetch;
+			//
+
 		}
+
+		
+		foreach ($listMatch as $test) {
+			$matchHome =  $this->common->match_home(array('ownerID' => $test->subID,'travel_plan.locID' => $test->locID));
+		}
+
+			
+	
+		$haystack = $matchHome;
+
+
+
+		
+		// foreach($compare as $out){
+		// 	$true = false;
+		// 	$kani = $this->common->getrow('travel_plan', array('subID' => $out->subID));
+		// 	foreach($myhomes as $akongbalay){
+		// 		if($kani->locID == $akongbalay->locID && $kani->PMaxGuests <= $akongbalay->maxGuests){
+		// 			$true = true;
+		// 		}
+		// 	}
+		// 	if($true == true){
+		// 		$haystack[] = $out;
+		// 	}
+		// }
 		//echo count($haystack);
 		//pagintaion 
 		$this->load->library('pagination');

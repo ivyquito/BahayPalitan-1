@@ -359,6 +359,23 @@ class common extends CI_Model {
 			return "fail";
 		}
 	}
+
+	function filterMatch($ownerID, $sdate, $edate){
+		$sql = "SELECT * FROM `travel_plan` WHERE travel_plan.subID <> '".$ownerID."' AND (PStartDAte >= '".$sdate."' AND PEndDate <= '".$edate."') AND travel_plan.locID in (SELECT locID FROM homes WHERE homes.ownerID = '".$ownerID."') ORDER BY travel_plan.subID";
+		$query = $this->db->query($sql);
+		return  $query->row();
+	}
+
+	function getrow2($table='',$where=''){
+		if(!empty($where)){
+			$this->db->where($where);
+			$query = $this->db->get($table);
+		}else{
+			$query = $this->db->get($table);
+		}
+		return $query->result();
+	}
+
 }
 
 ?>

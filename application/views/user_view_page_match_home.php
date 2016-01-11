@@ -32,10 +32,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
         <!-- /.row -->
 		<?php 
-        if(count($match_home) > 0):
-		foreach($match_home as $row):
-           if($row->subID == $user_info->subID)
-              continue;
+
+        //var_dump($match_home);
+
+        if(count($match_home) > 0){
+		foreach($match_home as $row){
+           // if($row->subID == $user_info->subID)
+           //    continue;
 		?>
         <!-- Details One -->
         <div class="row">
@@ -90,12 +93,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
         <!-- /.row -->
 		<hr>
-		<?php endforeach;?>
+		<?php 
+        //endforeach;
+            }?>
         <div id="pagination"><?php echo $links; ?></div> 
         <?php
-        else:
+        }
+        else{
             echo '<center><p style="font-size:18px">No match home...</p></center>';
-        endif;
+        }
+        //endif;
         ?>
         
 
