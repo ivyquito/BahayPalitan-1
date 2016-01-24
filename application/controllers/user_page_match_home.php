@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class user_page_match_home extends CI_Controller {
-	
+
 	public function __construct() {
         parent::__construct();
         if($this->session->userdata('sub')!=''){
@@ -30,7 +30,7 @@ class user_page_match_home extends CI_Controller {
 		foreach ($myhomes as $value) {
 			$gr[] = $value->locID;
 		}
-		
+
 		// $where 	= 	"homes.ownerID <> ".$uid." AND homes.locID = ".$myplan->locID." AND homes.swapStatus ='ACTIVE'".
 		// 			"AND (travel_plan.PStartDate = '".$myplan->PStartDate."'".
 		// 			"AND travel_plan.PEndDate <= '".$myplan->PEndDate."')".
@@ -43,6 +43,8 @@ class user_page_match_home extends CI_Controller {
 		//echo count($compare);
 		$in = array();
 		$haystack = array();
+		$listMatch = array();
+		$matchHome = array();
 
 		foreach($myplan as $plan){
 			$fetch = $this->common->filterMatch($uid,$plan->PStartDate,$plan->PEndDate);
@@ -52,18 +54,18 @@ class user_page_match_home extends CI_Controller {
 
 		}
 
-		
+
 		foreach ($listMatch as $test) {
 			$matchHome =  $this->common->match_home(array('ownerID' => $test->subID,'travel_plan.locID' => $test->locID));
 		}
 
-			
-	
+
+
 		$haystack = $matchHome;
 
 
 
-		
+
 		// foreach($compare as $out){
 		// 	$true = false;
 		// 	$kani = $this->common->getrow('travel_plan', array('subID' => $out->subID));
@@ -77,7 +79,7 @@ class user_page_match_home extends CI_Controller {
 		// 	}
 		// }
 		//echo count($haystack);
-		//pagintaion 
+		//pagintaion
 		$this->load->library('pagination');
 		$config = array();
 		$config["base_url"] = base_url() . "user_page_match_home/index";
@@ -97,10 +99,10 @@ class user_page_match_home extends CI_Controller {
 		foreach($haystack as $got){
 				if($start <= $xx && $per_page >= $counter){
 				$haystack2[] = $got;
-				$counter++; 
+				$counter++;
 				}
-				$xx++; 
-		}		
+				$xx++;
+		}
 
 		$data['match_home'] = $haystack2;
 		$data["links"] 	 	= $this->pagination->create_links();
