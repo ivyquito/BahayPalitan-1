@@ -1,7 +1,7 @@
 
     <div style="padding-top:80px">
 		 <div class="container-fluid">
-				<div class="container-page">				
+				<div class="container-page">
 					<div class="col-md-offset-2 col-lg-8">
 						<div class="panel panel-default">
                         <div class="panel-heading">
@@ -24,7 +24,7 @@
                                             <td><?php echo $plan->planName.' - '.$plan->planDesc ?></td>
                                             <td><?php echo $plan->planAmount ?></td>
                                             <td><?php echo $days_left['days'].' days '.$days_left['hours'],' hours'; ?></td>
-                                            <td><?php echo $payment_info->card,' - '.$payment_info->card_number; ?>
+                                            <td>PAYPAL
                                             </td>
                                         </tr>
                                     </tbody>
@@ -32,8 +32,8 @@
                             </div>
                         </div>
                         <!-- .panel-body -->
-						</div>			
-					</div>	
+						</div>
+					</div>
 				</div>
 		</div>
     </div>
