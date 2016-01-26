@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<?php echo base_url();?>assets/css/star-rating.css" type="text/css">
+<script src="<?php echo base_url();?>assets/js/star-rating.js"></script>
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
@@ -32,8 +34,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <p style="color:#fff;display:block; width:200px;display: inline-block;"><b><?php echo $viewhome->fname.' '.$viewhome->lname; ?></b></p>
                 </div>
                 <h3>Details</h3>
+
                 <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
                 <h3>Short Description</h3>-->
+                <input type="hidden" id="ownerID" value="<?php echo $viewhome->ownerID ?>" />
+                <input type="hidden" id="homeID" value="<?php echo $viewhome->homeID ?>" />
                 <ul>
                      <li><b>Location: </b> <?php echo $viewhome->cityName; ?></li>
                      <li><b>Home Post Type: </b> <?php echo $viewhome->homePostType; ?></li>
@@ -44,18 +49,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <li><b>Cancelled Negotiation: </b> <?php echo $viewhome->cancelledNegotiation; ?></li>
                     <li><b>Amenities: </b> <?php echo $viewhome->amenities; ?></li>
                 </ul>
+                <b>Comment</b>
+                <textarea id="commentarea" class="form-control"></textarea>
+                <br>
+                <input type="button" value="Submit" onclick="submitComment();" class="btn btn-sm btn-default" />
             </div>
             <div class="col-md-4">
+            <!--<br/>
             <br/>
             <br/>
             <br/>
-            <br/>
-            <br/>
+            <br/> -->
                     <div class="ratings">
                                 <?php 
                                 if($rate !==''):
-                                foreach ($rate as $key => $value): ?>
-                                <p class="pull-right"><?php echo ucfirst($key) ?></p>
+                                $count = 0;
+                                foreach ($rate as $key => $value): $count++?>
+                                <div class="radio">
+                                    <label>
+                                        <input id="rating-star-<?php echo $count; ?>" type="number" value="<?php echo $value ?>" class="rating rating-count" data-size="xs" min=0 max=5 step=1 />
+                                    </label>
+                                    <input type="text" style="display: none;" id="rateDescription-<?php echo $count; ?>" value="<?php echo ucfirst($key);  ?>">
+                                    <?php echo ucfirst($key) ?>
+
+                                </div>
+<!--                                 <p class="pull-right"><?php echo ucfirst($key) ?></p>
                                 <p>
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 1 && $total != 0 ? '':'-empty'); ?>"></span>
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 2 && $total != 0 ? '':'-empty'); ?>"></span>
@@ -66,7 +84,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 7 && $total != 0 ? '':'-empty'); ?>"></span>
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 8 && $total != 0 ? '':'-empty'); ?>"></span>
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 9 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 10 && $total != 0 ? '':'-empty'); ?>"></span>
+                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 10 && $total != 0 ? '':'-empty'); ?>"></span> -->
                                 </p>
                                 <?php endforeach; ?>
                                 <?php else:
@@ -81,11 +99,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         'reliability'=> 0,
                                         'overallimpression'=> 0
                                         );
-                                foreach ($rate as $key => $value):?>
-                                <p class="pull-right"><?php echo ucfirst($key) ?></p>
-                                <p>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 1 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 2 && $total != 0 ? '':'-empty'); ?>"></span>
+                                $count = 0;
+                                foreach ($rate as $key => $value): $count++;?>
+                                <!-- <p class="pull-right"><?php echo ucfirst($key) ?></p> -->
+                                <!-- <p> -->
+                                <div class="radio">
+                                    <label>
+                                        <input id="rating-star-<?php echo $count; ?>" type="number" class="rating rating-count" data-size="xs" min=0 max=5 step=1 />
+                                    </label>
+                                    <input type="text" style="display: none;" id="rateDescription-<?php echo $count; ?>" value="<?php echo ucfirst($key);  ?>">
+                                    <?php echo ucfirst($key) ?>
+
+                                </div>
+                                    
+<!--                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 2 && $total != 0 ? '':'-empty'); ?>"></span>
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 3 && $total != 0 ? '':'-empty'); ?>"></span>
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 4 && $total != 0 ? '':'-empty'); ?>"></span>
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 5 && $total != 0 ? '':'-empty'); ?>"></span>
@@ -93,11 +120,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 7 && $total != 0 ? '':'-empty'); ?>"></span>
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 8 && $total != 0 ? '':'-empty'); ?>"></span>
                                     <span class="glyphicon glyphicon-star<?php echo ($value >= 9 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 10 && $total != 0 ? '':'-empty'); ?>"></span>
-                                </p>
+                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 10 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                <!-- </p> -->
 
                                 <?php endforeach; ?>
                                 <?php endif; ?>
+
                     </div>
                     
             </div>
@@ -227,7 +255,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         </div>
         <!-- /.row -->
-        <h3 class="page-header">Rates & Raviews<br>
+        <h3 class="page-header">Rates & Reviews<br>
         </h3>
         <!--commments--> <!--style="border-bottom:1px solid #888888" -->
         <style>
@@ -260,14 +288,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star"></i></a>';
                              $x++;
                             }
-                            while($x < 10){
+                            while($x < 5){
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star-o"></i></a>';
                              $x++; 
                             }
 
                             ?>
                         </div>
-                        <p id="rate" class="pey"><?php echo $value->safety ?>/10</p>
+                        <p id="rate" class="pey"><?php echo $value->safety ?>/5</p>
                         <div style="display:inline-block;vertical-align:top;width:325px">
                             <label>Comfort :</label>
                             <?php
@@ -276,14 +304,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star"></i></a>';
                              $x++;
                             }
-                            while($x < 10){
+                            while($x < 5){
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star-o"></i></a>';
                              $x++; 
                             }
 
                             ?>
                         </div>
-                        <p id="rate" class="pey"><?php echo $value->cleanliness ?>/10</p>
+                        <p id="rate" class="pey"><?php echo $value->cleanliness ?>/5</p>
 
                         <div style="display:inline-block;vertical-align:top;width:325px">
                             <label>Cleanliness :</label>
@@ -293,14 +321,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star"></i></a>';
                              $x++;
                             }
-                            while($x < 10){
+                            while($x < 5){
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star-o"></i></a>';
                              $x++; 
                             }
 
                             ?>
                         </div>
-                        <p id="rate" class="pey"><?php echo $value->cleanliness ?>/10</p>
+                        <p id="rate" class="pey"><?php echo $value->cleanliness ?>/5</p>
 
                         <div style="display:inline-block;vertical-align:top;width:325px">
                             <label>Environment :</label>
@@ -310,14 +338,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star"></i></a>';
                              $x++;
                             }
-                            while($x < 10){
+                            while($x < 5){
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star-o"></i></a>';
                              $x++; 
                             }
 
                             ?>
                         </div>
-                        <p id="rate" class="pey"><?php echo $value->environment ?>/10</p>
+                        <p id="rate" class="pey"><?php echo $value->environment ?>/5</p>
 
                         <div style="display:inline-block;vertical-align:top;width:325px">
                             <label>Accessibility :</label>
@@ -327,14 +355,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star"></i></a>';
                              $x++;
                             }
-                            while($x < 10){
+                            while($x < 5){
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star-o"></i></a>';
                              $x++; 
                             }
 
                             ?>
                         </div>
-                        <p id="rate" class="pey"><?php echo $value->accessibility ?>/10</p>
+                        <p id="rate" class="pey"><?php echo $value->accessibility ?>/5</p>
                         
                         <div style="display:inline-block;vertical-align:top;width:325px">
                             <label>Hospitality :</label>
@@ -344,14 +372,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star"></i></a>';
                              $x++;
                             }
-                            while($x < 10){
+                            while($x < 5){
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star-o"></i></a>';
                              $x++; 
                             }
 
                             ?>
                         </div>
-                        <p id="rate" class="pey"><?php echo $value->hospitality ?>/10</p>
+                        <p id="rate" class="pey"><?php echo $value->hospitality ?>/5</p>
 
                         <div style="display:inline-block;vertical-align:top;width:325px">
                             <label>Honesty :</label>
@@ -361,14 +389,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star"></i></a>';
                              $x++;
                             }
-                            while($x < 10){
+                            while($x < 5){
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star-o"></i></a>';
                              $x++; 
                             }
 
                             ?>
                         </div>
-                        <p id="rate" class="pey"><?php echo $value->honesty ?>/10</p>
+                        <p id="rate" class="pey"><?php echo $value->honesty ?>/5</p>
 
                         <div style="display:inline-block;vertical-align:top;width:325px">
                             <label>Reliability :</label>
@@ -378,14 +406,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star"></i></a>';
                              $x++;
                             }
-                            while($x < 10){
+                            while($x < 5){
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star-o"></i></a>';
                              $x++; 
                             }
 
                             ?>
                         </div>
-                        <p id="rate" class="pey"><?php echo $value->reliability ?>/10</p>
+                        <p id="rate" class="pey"><?php echo $value->reliability ?>/5</p>
 
                         <div style="display:inline-block;vertical-align:top;width:325px">
                             <label>Over all Impression :</label>
@@ -395,14 +423,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star"></i></a>';
                              $x++;
                             }
-                            while($x < 10){
+                            while($x < 5){
                              echo '<a href="javascript;" class="hold"><i class="fa  fa-star-o"></i></a>';
                              $x++; 
                             }
 
                             ?>
                         </div>
-                        <p id="rate" class="pey"><?php echo $value->overallimpression ?>/10</p>
+                        <p id="rate" class="pey"><?php echo $value->overallimpression ?>/5</p>
 
                         <div class="form-group">
                             <label>Comment :</label>
@@ -450,11 +478,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="javascript;" id="3" class="star"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="4" class="star"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="5" class="star"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="6" class="star"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="7" class="star"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="8" class="star"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="9" class="star"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="10" class="star"><i class="fa  fa-star-o"></i></a>
+
                 </div>
                 <p id="rate" class="pey">0/10</p>
                 
@@ -467,11 +491,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="javascript;" id="2-3" class="star2"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="2-4" class="star2"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="2-5" class="star2"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="2-6" class="star2"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="2-7" class="star2"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="2-8" class="star2"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="2-9" class="star2"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="2-10"class="star2"><i class="fa  fa-star-o"></i></a>
+
                 </div>
                 <p id="rate2" class="pey">0/10</p>
 
@@ -484,11 +504,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="javascript;" id="3-3" class="star3"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="3-4" class="star3"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="3-5" class="star3"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="3-6" class="star3"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="3-7" class="star3"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="3-8" class="star3"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="3-9" class="star3"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="3-10"class="star3"><i class="fa  fa-star-o"></i></a>
+
                 </div>
                 <p id="rate3" class="pey">0/10</p>
 
@@ -501,11 +517,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="javascript;" id="4-3" class="star4"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="4-4" class="star4"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="4-5" class="star4"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="4-6" class="star4"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="4-7" class="star4"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="4-8" class="star4"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="4-9" class="star4"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="4-10"class="star4"><i class="fa  fa-star-o"></i></a>
+
                 </div>
                 <p id="rate4" class="pey">0/10</p>
 
@@ -518,11 +530,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="javascript;" id="5-3" class="star5"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="5-4" class="star5"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="5-5" class="star5"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="5-6" class="star5"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="5-7" class="star5"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="5-8" class="star5"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="5-9" class="star5"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="5-10"class="star5"><i class="fa  fa-star-o"></i></a>
+
                 </div>
                 <p id="rate5" class="pey">0/10</p>
 
@@ -535,11 +543,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="javascript;" id="6-3" class="star6"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="6-4" class="star6"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="6-5" class="star6"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="6-6" class="star6"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="6-7" class="star6"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="6-8" class="star6"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="6-9" class="star6"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="6-10"class="star6"><i class="fa  fa-star-o"></i></a>
+
                 </div>
                 <p id="rate6" class="pey">0/10</p>
 
@@ -552,11 +556,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="javascript;" id="7-3" class="star7"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="7-4" class="star7"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="7-5" class="star7"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="7-6" class="star7"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="7-7" class="star7"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="7-8" class="star7"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="7-9" class="star7"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="7-10"class="star7"><i class="fa  fa-star-o"></i></a>
+
                 </div>
                 <p id="rate7" class="pey">0/10</p>
 
@@ -569,11 +569,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="javascript;" id="8-3" class="star8"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="8-4" class="star8"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="8-5" class="star8"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="8-6" class="star8"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="8-7" class="star8"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="8-8" class="star8"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="8-9" class="star8"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="8-10"class="star8"><i class="fa  fa-star-o"></i></a>
                 </div>
                 <p id="rate8" class="pey">0/10</p>
 
@@ -586,11 +581,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="javascript;" id="9-3" class="star9"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="9-4" class="star9"><i class="fa  fa-star-o"></i></a>
                 <a href="javascript;" id="9-5" class="star9"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="9-6" class="star9"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="9-7" class="star9"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="9-8" class="star9"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="9-9" class="star9"><i class="fa  fa-star-o"></i></a>
-                <a href="javascript;" id="9-10"class="star9"><i class="fa  fa-star-o"></i></a>
                 </div>
                 <p id="rate9" class="pey">0/10</p>
 
@@ -636,7 +626,57 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
     <script>
+            function rateStars(count)
+            {
+                $('#rating-star-'+count).on('rating.change', function() {
+                    // alert($('#rating-star-'+count).val()+" star");
+                    $.post("<?php echo base_url(); ?>user_page_viewhome/rate_house",
+                        {
+                            rateValue:          $('#rating-star-'+count).val(),
+                            rateDescription:    $("#rateDescription-"+count).val(),
+                            ownerID:            $("#ownerID").val(),
+                            homeID:             $("#homeID").val()
+                        },function(data){
+
+                    });
+                });
+            }
+
+            function submitComment()
+            {
+                if($("#commentarea").val() != "")
+                {
+                    $.post("<?php echo base_url(); ?>user_page_viewhome/submit_comment",
+                        {
+                            comment:            $("#commentarea").val(),
+                            ownerID:            $("#ownerID").val(),
+                            homeID:             $("#homeID").val()
+                        },function(data){
+                        if(data == 1)
+                        {
+                            alert("Thank you for your feedback.")
+                        }
+                    });
+                }else{  alert("Please fill up the field first before you submit.") }
+            }
+
             $(document).ready(function(){
+                $(".clear-rating-active").hide();
+                $(".caption").hide();
+
+                var count = $(".rating-count").length;
+                for(var i = 1; i <= count; i++)
+                {
+                    // $('#rating-star-'+count).rating({
+                    //       min: 0,
+                    //       max: 5,
+                    //       step: 1,
+                    //       size: 'sm',
+                    //       showClear: false
+                    //    });
+                    rateStars(i);
+                }
+
                 $('#report').submit(function(){
                 if(confirm("Are you sure you want to report this home?")){
                     return true;
@@ -713,7 +753,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                    }
                 });
             });
-            
+
             function starry(id){
                 var ini = id.split("-");
                 var idi = '';
@@ -763,3 +803,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             }
             
         </script>
+
+        

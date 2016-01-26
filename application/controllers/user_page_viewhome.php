@@ -85,7 +85,7 @@ class user_page_viewhome extends CI_Controller {
 			}
 
 			//get all reviews
-			$data['reviews'] = $reviews = $this->common->getreviews($homeId);
+			$data['reviews'] = $reviews = $this->common->getreviews($homeId, $myid);
 			$ctr = 0;
 			$safety = 0;
 			$comfort = 0;
@@ -476,5 +476,122 @@ class user_page_viewhome extends CI_Controller {
 		}else{
 			redirect(base_url().'user_page_home');
 		}
+	}
+
+	function submit_comment()
+	{
+		$session_info 		= $this->session->userdata('user_info');
+		$subsID				= $session_info->subID;
+		$toID				= $this->input->post('ownerID');
+		$homeID 			= $this->input->post('homeID');
+		$comment 			= $this->input->post('comment');
+
+		$data = array("comment" => $comment);
+		$where = array(
+				"homeID" 		=> $homeID,
+				"from_userID"	=> $subsID
+			);
+		$checkData = $this->common->getrow2('ratings_reviews', $where);
+		if(!empty($checkData))
+		{
+			$update = $this->common->update_rate($where, $data);
+			if($update == 1)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			$insert = $this->common->insert_rate($data);
+			if($insert == 1)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+	}
+
+	function rate_house()
+	{
+		$session_info 		= $this->session->userdata('user_info');
+		$subsID				= $session_info->subID;
+		$toID				= $this->input->post('ownerID');
+		$homeID 			= $this->input->post('homeID');
+		$rateValue 			= $this->input->post('rateValue');
+		$rateDescription 	= $this->input->post('rateDescription');
+
+		if($rateDescription == "Safety")
+		{
+			$data = array("safety" => $rateValue, "homeID" => $homeID, "from_userID" => $subsID, "to_userId" => $toID);
+		}
+		else if($rateDescription == "Comfort")
+		{
+			$data = array("comfort" => $rateValue, "homeID" => $homeID, "from_userID" => $subsID, "to_userId" => $toID);
+		}
+		else if($rateDescription == "Cleanliness")
+		{
+			$data = array("cleanliness" => $rateValue, "homeID" => $homeID, "from_userID" => $subsID, "to_userId" => $toID);
+		}
+		else if($rateDescription == "Environment")
+		{
+			$data = array("environment" => $rateValue, "homeID" => $homeID, "from_userID" => $subsID, "to_userId" => $toID);
+		}
+		else if($rateDescription == "Accessibility")
+		{
+			$data = array("accessibility" => $rateValue, "homeID" => $homeID, "from_userID" => $subsID, "to_userId" => $toID);
+		}
+		else if($rateDescription == "Hospitality")
+		{
+			$data = array("hospitality" => $rateValue, "homeID" => $homeID, "from_userID" => $subsID, "to_userId" => $toID);
+		}
+		else if($rateDescription == "Honesty")
+		{
+			$data = array("honesty" => $rateValue, "homeID" => $homeID, "from_userID" => $subsID, "to_userId" => $toID);
+		}		
+		else if($rateDescription == "Reliability")
+		{
+			$data = array("reliability" => $rateValue, "homeID" => $homeID, "from_userID" => $subsID, "to_userId" => $toID);
+		}		
+		else if($rateDescription == "Overallimpression")
+		{
+			$data = array("overallimpression" => $rateValue, "homeID" => $homeID, "from_userID" => $subsID, "to_userId" => $toID);
+		}
+		$where = array(
+				"homeID" 		=> $homeID,
+				"from_userID"	=> $subsID
+			);
+		$checkData = $this->common->getrow2('ratings_reviews', $where);
+		if(!empty($checkData))
+		{
+			$update = $this->common->update_rate($where, $data);
+			if($update == 1)
+			{
+				echo "success";
+			}
+			else
+			{
+				echo "fail";
+			}
+		}
+		else
+		{
+			$insert = $this->common->insert_rate($data);
+			if($insert == 1)
+			{
+				echo "success";
+			}
+			else
+			{
+				echo "fail";
+			}
+		}
+
 	}
 }

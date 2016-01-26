@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<?php echo base_url();?>assets/css/star-rating.css" type="text/css">
+<script src="<?php echo base_url();?>assets/js/star-rating.js"></script>
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
@@ -67,19 +69,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <?php 
                                 if($rate !==''):
                                 foreach ($rate as $key => $value): ?>
-                                <p class="pull-right"><?php echo ucfirst($key) ?></p>
-                                <p>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 1 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 2 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 3 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 4 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 5 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 6 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 7 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 8 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 9 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 10 && $total != 0 ? '':'-empty'); ?>"></span>
-                                </p>
+                                <div class="radio">
+                                    <label>
+                                        <input id="rating-star ?>" type="number" value="<?php echo $value ?>" disabled class="rating rating-count" data-size="xs" min=0 max=5 step=0.5 />
+                                    </label>
+                                    <?php echo ucfirst($key) ?>
+
+                                </div>
+                                <!-- <p class="pull-right"><?php echo ucfirst($key) ?></p> -->
+                                <!-- <p> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 1 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 2 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 3 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 4 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 5 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 6 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 7 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 8 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 9 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 10 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                <!-- </p> -->
                                 <?php endforeach; ?>
                                 <?php else:
                                 $rate = array(
@@ -93,20 +102,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                         'reliability'=> 0,
                                         'overallimpression'=> 0
                                         );
-                                foreach ($rate as $key => $value):?>
-                                <p class="pull-right"><?php echo ucfirst($key) ?></p>
-                                <p>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 1 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 2 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 3 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 4 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 5 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 6 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 7 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 8 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 9 && $total != 0 ? '':'-empty'); ?>"></span>
-                                    <span class="glyphicon glyphicon-star<?php echo ($value >= 10 && $total != 0 ? '':'-empty'); ?>"></span>
-                                </p>
+                                foreach ($rate as $key => $value): ?>
+                                <div class="radio">
+                                    <label>
+                                        <input id="rating-star ?>" type="number" value="<?php echo $value ?>" disabled class="rating rating-count" data-size="xs" min=0 max=5 step=0.5 />
+                                    </label>
+                                    <!-- <input type="text" style="display: none;" id="rateDescription-<?php echo $count; ?>" value="<?php echo ucfirst($key);  ?>"> -->
+                                    <?php echo ucfirst($key) ?>
+
+                                </div>
+                                <!-- <p class="pull-right"><?php echo ucfirst($key) ?></p> -->
+                                <!-- <p> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 1 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 2 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 3 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 4 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 5 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 6 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 7 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 8 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 9 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                    <!-- <span class="glyphicon glyphicon-star<?php echo ($value >= 10 && $total != 0 ? '':'-empty'); ?>"></span> -->
+                                <!-- </p> -->
 
                                 <?php endforeach; ?>
                                 <?php endif; ?>
@@ -164,6 +181,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <script>
     $(document).ready(function(){
+        $(".clear-rating").hide();
+        $(".clear-rating-active").hide();
+        $(".caption").hide();
         $('#changeword').click(function(){
             $(this).hide();
             $('#changeform').show();

@@ -261,7 +261,13 @@ class common extends CI_Model {
 		$query = $this->db->query("SELECT * FROM home_swap WHERE (swap_home = $myid AND swap_home_to = $homeid) OR (swap_home = $homeid AND swap_home_to = $myid) AND (action = 'swapped' OR action = 'done-pending')");
 		return $query->row();
 	}
-	function getreviews($id){
+	function getreviews($id, $myID){
+		$this->db->select('*');
+		$this->db->join('subscribers', 'subscribers.subID = ratings_reviews.from_userID','left');
+		$query = $this->db->get_where('ratings_reviews',array('homeID'=>$id, 'from_userID' => $myID));
+		return  $query->result();
+	}	
+	function getreviews_myhome($id){
 		$this->db->select('*');
 		$this->db->join('subscribers', 'subscribers.subID = ratings_reviews.from_userID','left');
 		$query = $this->db->get_where('ratings_reviews',array('homeID'=>$id));
@@ -376,6 +382,33 @@ class common extends CI_Model {
 		return $query->result();
 	}
 
+	function insert_rate($data)
+	{
+		$query = $this->db->insert('ratings_reviews',$data);
+
+		if($query)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	function update_rate($where, $data)
+	{
+		$query = $this->db->update('ratings_reviews', $data, $where);
+
+		if($query)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
 }
 
 ?>

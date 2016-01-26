@@ -308,7 +308,7 @@ class user_page_myhome extends CI_Controller {
 		$check 	= $this->common->getrow('homes',array('ownerID'=>$uid,'homeID' =>$home_id));
 		if($check){
 			//get all reviews
-			$data['reviews'] = $reviews = $this->common->getreviews($home_id);
+			$data['reviews'] = $reviews = $this->common->getreviews_myhome($home_id);
 			$ctr = 0;
 			$safety = 0;
 			$comfort = 0;
