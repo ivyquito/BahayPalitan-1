@@ -511,6 +511,9 @@ CREATE TABLE IF NOT EXISTS `travel_plan` (
   `PEndDate` date NOT NULL,
   `locID` int(8) NOT NULL,
   `subID` int(8) NOT NULL,
+  `Lat` varchar(100) NOT NULL COMMENT 'google latitude',
+  `Long` varchar(100) NOT NULL COMMENT 'google longitude',
+  `GoogleAddr` varchar(100) NOT NULL COMMENT 'google address',
   PRIMARY KEY (`TravelPlanID`),
   KEY `subID` (`subID`),
   KEY `locID` (`locID`)

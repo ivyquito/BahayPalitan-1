@@ -148,6 +148,7 @@ $(document).ready(function(){
                             window.location.href = '<?php echo base_url(); ?>user_page_travelplan/addNew/';
                         }
                    }
+                   
                 });
 
             }

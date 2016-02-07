@@ -41,6 +41,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     });
     </script>
     <?php endif; ?>
+
+
+    
+
+    <!-- added scripts -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('.show-home-modal').click(function(e){
+                e.preventDefault();
+                $('#home-modal').modal('show');
+           
+
+            });
+        });
+    </script>
 </body>
 
 </html>
