@@ -523,13 +523,13 @@ CREATE TABLE IF NOT EXISTS `travel_plan` (
 -- Dumping data for table `travel_plan`
 --
 
-INSERT INTO `travel_plan` (`TravelPlanID`, `PAmenities`, `PMaxGuests`, `PStartDate`, `PEndDate`, `locID`, `subID`) VALUES
-(1, 'first balay ni John Carlosssssssss', 10, '2016-02-02', '2016-03-02', 4, 1),
-(2, 'air conditioned room and WiFi', 5, '2015-11-25', '2015-12-25', 2, 2),
-(3, 'should have airconditioned rooms', 5, '2015-10-25', '2015-11-25', 1, 3),
-(4, 'should have refrigerator...1 airconditioned room...WiFi if  possible', 5, '2015-11-25', '2015-12-25', 2, 4),
-(5, 'airconditioned room is enough', 5, '2015-10-25', '2015-11-25', 4, 5),
-(6, 'try try lng bah', 10, '2016-02-02', '2016-03-02', 4, 1);
+INSERT INTO `travel_plan` (`TravelPlanID`, `PAmenities`, `PMaxGuests`, `PStartDate`, `PEndDate`, `locID`, `subID`, `Lat`, `Long`, `GoogleAddr`) VALUES
+(1, 'amoang balay', 8, '2016-01-08', '2016-01-08', 87, 6, '14.6254827', '121.12448470000004', 'Antipolo, 1870 Rizal, Philippines'),
+(2, '', 9, '2016-01-13', '2016-01-15', 89, 6, '10.3158987', '123.90958739999996', 'Camotes Rd, Cebu City, Cebu, Philippines'),
+(3, '', 14, '2016-01-20', '2016-01-22', 90, 6, '10.3005414', '123.87064809999993', 'Tisa Basketball Gym, Cebu City, Cebu, Philippines'),
+(4, '', 50, '2016-01-28', '2016-01-30', 91, 6, '10.2700868', '123.83135960000004', 'Lagtang, Talisay City, Cebu, Philippines');
+
+
 
 -- --------------------------------------------------------
 
