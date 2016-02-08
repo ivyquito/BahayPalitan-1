@@ -32,10 +32,18 @@ class User_page_home extends CI_Controller {
 		$config['uri_segment'] = 3;
 		//$config['use_page_numbers'] = TRUE;
 		//$config['num_links'] = $total_row;
-		$config['cur_tag_open'] = '&nbsp;<a class="current">';
-		$config['cur_tag_close'] = '</a>';
-		$config['next_link'] = 'Next';
-		$config['prev_link'] = 'Previous';
+       	$config['full_tag_open'] = '<nav class="pull-right"><ul class="pagination">';
+		$config['full_tag_close'] = '</ul></nav><!--pagination-->';
+		$config['cur_tag_open'] = '<li class="active"><a>';
+		$config['cur_tag_close'] = '</a></li>';
+		$config['num_tag_open'] = '<li>';
+		$config['num_tag_close'] = '</li>';
+		$config['next_link'] = '&raquo;';
+		$config['next_tag_open'] = '<li>';
+		$config['next_tag_close'] = '</li>';
+		$config['prev_link'] = '&laquo;';
+		$config['prev_tag_open'] = '<li>';
+		$config['prev_tag_close'] = '</li>';
 		$this->pagination->initialize($config);
 		
 

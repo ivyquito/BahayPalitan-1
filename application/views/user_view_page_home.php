@@ -150,8 +150,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         </div> <!-- end of new added div row -->
 
+       
+        <?php echo $links; ?>
 
-        <div id="pagination"><?php echo $links; ?></div>
         <?php else: ?>
             <div class="row" style="padding: 10%;">
                 <center><b>Sory, No Data Found</b></center>

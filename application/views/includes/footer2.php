@@ -1,8 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
+
 <footer class="main-footer">
         <div class="container">
+            
           <div class="pull-right hidden-xs">
             <b>Version</b> 2.0
           </div>
@@ -52,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $('.show-home-modal').click(function(e){
                 e.preventDefault();
                 $('#home-modal').modal('show');
-           
+
 
             });
         });

@@ -367,9 +367,9 @@ class common extends CI_Model {
 	}
 
 	function filterMatch($ownerID, $sdate, $edate){
-		$sql = "SELECT * FROM `travel_plan` WHERE travel_plan.subID <> '".$ownerID."' AND (PStartDAte >= '".$sdate."' AND PEndDate <= '".$edate."') AND travel_plan.locID in (SELECT locID FROM homes WHERE homes.ownerID = '".$ownerID."') ORDER BY travel_plan.subID";
+		$sql = "SELECT * FROM `travel_plan`  WHERE travel_plan.subID <> '".$ownerID."' AND (PStartDAte >= '".$sdate."' AND PEndDate <= '".$edate."') AND travel_plan.locID in (SELECT locID FROM homes WHERE homes.ownerID = '".$ownerID."') ORDER BY travel_plan.subID";
 		$query = $this->db->query($sql);
-		return  $query->row();
+		return  $query->result();
 	}
 
 	function getrow2($table='',$where=''){
@@ -409,6 +409,46 @@ class common extends CI_Model {
 			return 0;
 		}
 	}
+
+	public function fetch_homes_user($limit, $start, $myid) {
+        
+        $this->db->select('*');
+		$this->db->limit($limit, $start);
+		$this->db->where(" ownerID = $myid");
+		$this->db->join('area_type', 'area_type.ATypeID = homes.homeID','left');
+		$this->db->join('house_type', 'house_type.HTypeID = homes.HTypeID','left');
+		$this->db->join('locations', 'locations.locID = homes.locID','left');
+		$this->db->join('subscribers', 'subscribers.subID = homes.ownerID','left');
+		$query = $this->db->get('homes');
+        if ($query->num_rows() > 0) {
+
+            //foreach ($query->result() as $row) {
+            	//echo '<br/>'.$c++.'jh';
+            	//echo '<pre>';
+            	//print_r($row);
+            	//echo '<pre>';
+               //$data[] = $row;
+            //}
+            return $query->result();
+        }
+        return false;
+   }
+
+
+   function match_home_new($ownerID,$locID){
+		$sql = "SELECT * FROM `homes` h join travel_plan t on h.locID = t.locID left join area_type a on h.aTypeId = a.AtypeID left join locations l on h.locID = l.locID left join house_type hh on h.HtypeID = hh.HtypeID left join subscribers s on h.ownerID = s.subID WHERE h.ownerID = $ownerID and t.locID = $locID and h.swapStatus = 'ACTIVE' ORDER BY h.dealNegotiation ";
+		
+		$query = $this->db->query($sql);
+		return  $query->result();
+	}
+
+	function paginate_matchHomes($ownerID,$locID,$limit,$start){
+		$sql = "SELECT * FROM `homes` h join travel_plan t on h.locID = t.locID left join area_type a on h.aTypeId = a.AtypeID left join locations l on h.locID = l.locID left join house_type hh on h.HtypeID = hh.HtypeID left join subscribers s on h.ownerID = s.subID WHERE h.ownerID = $ownerID and t.locID = $locID and h.swapStatus = 'ACTIVE' ORDER BY h.dealNegotiation LIMIT $limit,$start";
+		
+		$query = $this->db->query($sql);
+		return  $query->result();
+	}
+
 }
 
 ?>

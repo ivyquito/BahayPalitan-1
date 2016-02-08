@@ -12,9 +12,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
            &nbsp;<br/>&nbsp;<br/>&nbsp;<br/>
         </div>
         <div class="row">
-            <div class="col-lg-3 topresult">
-                    <a href="<?php echo base_url();?>user_page_match_home">Matched Home</a> |
-                    <a href="<?php echo base_url();?>user_page_swap_home">Swapped Homes</a> |
+            <div class="col-lg-3">
+               <ul class="list-inline">
+                   <li> <a style="color:#E8EF42;" href="<?php echo base_url();?>user_page_match_home">Matched Homes</a></li>
+
+                   <li> <a style="color:#E8EF42;" href="<?php echo base_url();?>user_page_swap_home">Swapped Homes</a></li> 
+                </ul>
             </div>
             <div class="col-lg-9 ">
                 <form class="form-group" action="<?php echo base_url() ?>user_page_home/search" method = "get">

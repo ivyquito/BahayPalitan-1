@@ -93,7 +93,7 @@ class user_page_swap_home extends CI_Controller {
 		}
 
 		foreach($haystack as $nae){
-			echo $nae->homeID;
+			//echo $nae->homeID;
 		}
 		$data['match_homes'] = $haystack;
 		$data["links"] 	 	= $this->pagination->create_links();

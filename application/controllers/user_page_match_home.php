@@ -46,20 +46,47 @@ class user_page_match_home extends CI_Controller {
 		$listMatch = array();
 		$matchHome = array();
 
-		foreach($myplan as $plan){
+
+	
+		// echo '<pre>';
+		// print_r($myplan);
+		// echo '</pre>';
+		
+		foreach($myplan as $key => $plan){
+
+			// do crossmatching 
+
 			$fetch = $this->common->filterMatch($uid,$plan->PStartDate,$plan->PEndDate);
-			if(!empty($fetch))
-				$listMatch[] = $fetch;
-			//
+
+			if(!empty($fetch)){
+				$listMatch[$key] = $fetch;
+				$listMatch['planLocID'] = $plan->locID;
+	
+			}
+
+
 
 		}
 
 
-		foreach ($listMatch as $test) {
-			$matchHome =  $this->common->match_home(array('ownerID' => $test->subID,'travel_plan.locID' => $test->locID));
+		
+	
+
+		foreach ($listMatch[0] as $key => $match) {
+			
+			// do get homes per matched
+
+			$fetch = $this->common->match_home_new($match->subID, $listMatch['planLocID']);
+			
+			if(!empty($fetch)){
+				$matchHome[$key] = $fetch;
+			}
+
+
+
 		}
 
-
+		
 
 		$haystack = $matchHome;
 
@@ -79,13 +106,15 @@ class user_page_match_home extends CI_Controller {
 		// 	}
 		// }
 		//echo count($haystack);
+
+
 		//pagintaion
 		$this->load->library('pagination');
 		$config = array();
 		$config["base_url"] = base_url() . "user_page_match_home/index";
 		$total_row = sizeof($haystack);
 		$config["total_rows"] = $total_row;
-		$config["per_page"] = $per_page = 6;
+		$config["per_page"] = $per_page = 1;
 		$config['cur_tag_open']  = '&nbsp;<a class="current">';
 		$config['cur_tag_close'] = '</a>';
 		$config['next_link'] = 'Next';
@@ -103,7 +132,7 @@ class user_page_match_home extends CI_Controller {
 				}
 				$xx++;
 		}
-
+	
 		$data['match_home'] = $haystack2;
 		$data["links"] 	 	= $this->pagination->create_links();
 
