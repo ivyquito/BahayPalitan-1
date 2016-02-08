@@ -32,11 +32,31 @@ class user_page_myhome extends CI_Controller {
 						"status"		 => 	'active'
 					);
 
-				$insertLocation = $this->common->addLocation($locationData);
-				if($insertLocation == "success")
+				$where = array(
+						"latitude"		=> $this->input->post('lat'),
+						"longitude"		=> $this->input->post('lng'),
+						"cityName"		=> $this->input->post('formatted_address')
+					);
+				$checkLoc = $this->common->getrow3('locations', $where);
+				if($checkLoc !== NULL)
 				{
-					$getLoc = $this->common->getLastRowLocation();
-					$locID = $getLoc->locID;
+					$locID = $checkLoc->locID;
+				}
+				else
+				{
+					$insertLocation = $this->common->addLocation($locationData);
+					if($insertLocation == "success")
+					{
+						$getLoc = $this->common->getLastRowLocation();
+						$locID = $getLoc->locID;
+					}
+				}
+				
+				
+				// if($insertLocation == "success")
+				// {
+					// $getLoc = $this->common->getLastRowLocation();
+					// $locID = $getLoc->locID;
 
 					// $locID 			= trim($this->input->post('locID'));
 					$image 			= $_FILES['image'];
@@ -107,13 +127,13 @@ class user_page_myhome extends CI_Controller {
 						}
 					}
 
-				}
-				else
-				{
-					echo "<script>
-							alert('Fail to insert location.');
-						</script>";
-				}
+				// }
+				// else
+				// {
+					// echo "<script>
+							// alert('Fail to insert location.');
+						// </script>";
+				// }
 
 
 			}
@@ -410,16 +430,36 @@ class user_page_myhome extends CI_Controller {
 
 		$check 	= $this->common->getrow('homes',array('ownerID'=>$uid,'homeID' =>$num));
 		if($check){
-			$locID = $this->input->post('locationId');
+			// $locID = $this->input->post('locationId');
 			$locationData = array(
 					"cityName"			=> $this->input->post('formatted_address'),
 					"latitude"			=> $this->input->post('lat'),
 					"longitude"			=> $this->input->post('lng')
 				);
-			$upLocation = $this->common->updateLocation($locID,$locationData);
+			// $upLocation = $this->common->updateLocation($locID,$locationData);
 
-			if($upLocation == "success")
+			$where = array(
+					"latitude"		=> $this->input->post('lat'),
+					"longitude"		=> $this->input->post('lng'),
+					"cityName"		=> $this->input->post('formatted_address')
+				);
+			$checkLoc = $this->common->getrow3('locations', $where);
+			if($checkLoc !== NULL)
 			{
+				$locID = $checkLoc->locID;
+			}
+			else
+			{
+				$insertLocation = $this->common->addLocation($locationData);
+				if($insertLocation == "success")
+				{
+					$getLoc = $this->common->getLastRowLocation();
+					$locID = $getLoc->locID;
+				}
+			}
+
+			// if($upLocation == "success")
+			// {
 				// $locID 			= trim($this->input->post('locID'));
 				$areaType 		= trim($this->input->post('areaType'));
 				$houseType 		= trim($this->input->post('houseType'));
@@ -439,13 +479,13 @@ class user_page_myhome extends CI_Controller {
 					$this->common->change('homes',$update,array('ownerID'=>$uid,'homeID' =>$num));
 					redirect(base_url().'user_page_myhome/myhome/'.$num);
 				}
-			}
-			else
-			{
-				echo "<script>
-					alert('false');
-				</script>";
-			}
+			// }
+			// else
+			// {
+				// echo "<script>
+					// alert('false');
+				// </script>";
+			// }
 		}else{
 			redirect(base_url().'user_page_myhome');
 			exit;

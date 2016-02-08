@@ -382,6 +382,16 @@ class common extends CI_Model {
 		return $query->result();
 	}
 
+	function getrow3($table='',$where=''){
+		if(!empty($where)){
+			$this->db->where($where);
+			$query = $this->db->get($table);
+		}else{
+			$query = $this->db->get($table);
+		}
+		return $query->row();
+	}
+
 	function insert_rate($data)
 	{
 		$query = $this->db->insert('ratings_reviews',$data);

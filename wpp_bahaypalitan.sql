@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 26, 2016 at 06:25 AM
+-- Generation Time: Feb 08, 2016 at 05:34 PM
 -- Server version: 5.5.36
 -- PHP Version: 5.4.27
 
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `homes` (
   KEY `ATypeID` (`ATypeID`),
   KEY `HTypeID` (`HTypeID`),
   KEY `locID` (`locID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
 
 --
 -- Dumping data for table `homes`
@@ -166,7 +166,9 @@ INSERT INTO `homes` (`homeID`, `ownerID`, `ATypeID`, `HTypeID`, `locID`, `photos
 (4, 4, 6, 4, 4, 'home4_20150926035459.jpg', '2 rooms \r\n1 CR\r\nsecured with CCTV''s\r\nwith music room', 5, 'ACTIVE', 'Home', '3', '0'),
 (5, 5, 1, 6, 1, 'home5_20150926035836.jpg', '2 CR, one with hot and cold\r\n3 LED TV''s\r\nWiFi with 5mbps\r\nwith semi GYM', 7, 'ACTIVE', 'Home', '0', '0'),
 (6, 1, 1, 1, 8, 'home1_20151201060256.jpg', 'ikaduhang balay ni John Carlo', 10, 'ACTIVE', 'Home', '0', '0'),
-(8, 6, 2, 1, 6, 'home6_20160126014920.jpg', 'The quick brown fox jumps', 5, 'ACTIVE', 'Home', '0', '0');
+(8, 6, 2, 1, 6, 'home6_20160126014920.jpg', 'The quick brown fox jumps', 5, 'ACTIVE', 'Home', '0', '0'),
+(11, 1, 2, 3, 9, 'home1_20160208052349.png', '123', 2, 'ACTIVE', 'Division', '0', '0'),
+(12, 1, 2, 4, 9, 'home1_20160208052456.jpg', 'sad', 5, 'ACTIVE', 'Division', '0', '0');
 
 -- --------------------------------------------------------
 
@@ -234,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `locations` (
   `status` varchar(255) NOT NULL,
   PRIMARY KEY (`locID`),
   KEY `INDEX` (`countryID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `locations`
@@ -246,7 +248,9 @@ INSERT INTO `locations` (`locID`, `countryID`, `cityName`, `latitude`, `longitud
 (3, 1, 'Labangon, Cebu City, Cebu, Philippines', '10.2989677', '123.88131810000004', 'active'),
 (4, 1, 'Pardo, Cebu City, Cebu, Philippines', '10.2785117', '123.85431270000004', 'active'),
 (5, 1, 'Samboan, Cebu, Philippines', '9.5043588', '123.33739160000005', 'active'),
-(6, 1, 'Basak, Lapu-Lapu City, Cebu, Philippines', '10.2910239', '123.96104100000002', 'active');
+(6, 1, 'Basak, Lapu-Lapu City, Cebu, Philippines', '10.2910239', '123.96104100000002', 'active'),
+(9, 1, 'Ginatilan, Cebu, Philippines', '9.5786947', '123.3598366', 'active'),
+(10, 0, 'Badian, 6031 Cebu, Philippines', '9.8320892', '123.41592630000002', '');
 
 -- --------------------------------------------------------
 
@@ -408,28 +412,6 @@ INSERT INTO `plans` (`planID`, `planName`, `planDesc`, `planAmount`, `status`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ratings`
---
-
-CREATE TABLE IF NOT EXISTS `ratings` (
-  `rate_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `home_id` int(11) NOT NULL,
-  `safety` varchar(25) DEFAULT NULL,
-  `comfort` varchar(25) DEFAULT NULL,
-  `cleanliness` varchar(25) DEFAULT NULL,
-  `environment` varchar(25) DEFAULT NULL,
-  `accessibility` varchar(25) DEFAULT NULL,
-  `hospitality` varchar(25) DEFAULT NULL,
-  `honesty` varchar(25) DEFAULT NULL,
-  `reliability` varchar(25) DEFAULT NULL,
-  `overallimpression` varchar(25) DEFAULT NULL,
-  PRIMARY KEY (`rate_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `ratings_reviews`
 --
 
@@ -459,6 +441,30 @@ INSERT INTO `ratings_reviews` (`rating_id`, `homeID`, `to_userId`, `from_userID`
 (1, 1, 1, 5, NULL, '3', '2', '4', NULL, NULL, NULL, NULL, NULL, NULL),
 (2, 1, 1, 6, NULL, '4', '5', '4', NULL, NULL, NULL, NULL, NULL, NULL),
 (3, 8, 6, 1, 'sadness', '4', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '5');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings_user`
+--
+
+CREATE TABLE IF NOT EXISTS `ratings_user` (
+  `rate_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rate_from` varchar(11) NOT NULL,
+  `rate_to` varchar(11) NOT NULL,
+  `rate_number` varchar(11) DEFAULT NULL,
+  `comment` text,
+  PRIMARY KEY (`rate_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `ratings_user`
+--
+
+INSERT INTO `ratings_user` (`rate_id`, `rate_from`, `rate_to`, `rate_number`, `comment`) VALUES
+(1, '6', '1', '4', 'sadasdasd'),
+(2, '1', '3', '3', 'asdadadasd'),
+(3, '5', '1', '2', 'ueaaa');
 
 -- --------------------------------------------------------
 
@@ -511,9 +517,6 @@ CREATE TABLE IF NOT EXISTS `travel_plan` (
   `PEndDate` date NOT NULL,
   `locID` int(8) NOT NULL,
   `subID` int(8) NOT NULL,
-  `Lat` varchar(100) NOT NULL COMMENT 'google latitude',
-  `Long` varchar(100) NOT NULL COMMENT 'google longitude',
-  `GoogleAddr` varchar(100) NOT NULL COMMENT 'google address',
   PRIMARY KEY (`TravelPlanID`),
   KEY `subID` (`subID`),
   KEY `locID` (`locID`)
@@ -523,13 +526,13 @@ CREATE TABLE IF NOT EXISTS `travel_plan` (
 -- Dumping data for table `travel_plan`
 --
 
-INSERT INTO `travel_plan` (`TravelPlanID`, `PAmenities`, `PMaxGuests`, `PStartDate`, `PEndDate`, `locID`, `subID`, `Lat`, `Long`, `GoogleAddr`) VALUES
-(1, 'amoang balay', 8, '2016-01-08', '2016-01-08', 87, 6, '14.6254827', '121.12448470000004', 'Antipolo, 1870 Rizal, Philippines'),
-(2, '', 9, '2016-01-13', '2016-01-15', 89, 6, '10.3158987', '123.90958739999996', 'Camotes Rd, Cebu City, Cebu, Philippines'),
-(3, '', 14, '2016-01-20', '2016-01-22', 90, 6, '10.3005414', '123.87064809999993', 'Tisa Basketball Gym, Cebu City, Cebu, Philippines'),
-(4, '', 50, '2016-01-28', '2016-01-30', 91, 6, '10.2700868', '123.83135960000004', 'Lagtang, Talisay City, Cebu, Philippines');
-
-
+INSERT INTO `travel_plan` (`TravelPlanID`, `PAmenities`, `PMaxGuests`, `PStartDate`, `PEndDate`, `locID`, `subID`) VALUES
+(1, 'first balay ni John Carlosssssssss', 10, '2016-02-02', '2016-03-02', 4, 1),
+(2, 'air conditioned room and WiFi', 5, '2015-11-25', '2015-12-25', 2, 2),
+(3, 'should have airconditioned rooms', 5, '2015-10-25', '2015-11-25', 1, 3),
+(4, 'should have refrigerator...1 airconditioned room...WiFi if  possible', 5, '2015-11-25', '2015-12-25', 2, 4),
+(5, 'airconditioned room is enough', 5, '2015-10-25', '2015-11-25', 4, 5),
+(6, 'try try lng bah', 10, '2016-02-02', '2016-03-02', 4, 1);
 
 -- --------------------------------------------------------
 

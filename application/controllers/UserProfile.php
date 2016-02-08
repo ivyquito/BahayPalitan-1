@@ -21,11 +21,26 @@ class userProfile extends CI_Controller {
     public function index(){
 
     	$data['user_info'] = $user_info = $this->session->userdata('user_info');
-
+    	$subID = $user_info->subID;
     	$uid = $_GET['id'];
     	$data['profile'] = $this->common->getrow('subscribers',array("subID" => $uid));
     	$data['homes'] = $this->common->getall('homes',array('ownerID'=>$uid));
     	$data['reviews'] = $this->common->getall('ratings_reviews',array('to_userId'=>$uid));
+		$where = array(
+				"rate_to" 		=> $uid,
+				"rate_from"		=> $subID
+			);
+    	$user_rating = $this->common->getrow3('ratings_user', $where);
+    	if($user_rating !== NULL)
+    	{
+    		$data['rate_value'] = $user_rating->rate_number;
+    	}
+    	else
+    	{
+    		$data['rate_value'] = 0;
+    	}
+
+    	$data['userRate_review'] = $this->common->getall('ratings_user',array('rate_to'=>$uid));
 
     	$this->load->library('pagination'); 
 		$config = array();
@@ -67,4 +82,84 @@ class userProfile extends CI_Controller {
 
     }
 
+    public function rate_user()
+    {
+		$data['user_info'] = $user_info = $this->session->userdata('user_info');
+		$myid = $user_info->subID;
+		$user_to = $this->input->post('user_to');
+		$rateValue = $this->input->post('rateValue');
+		$data = array(
+				"rate_from" 	=> $myid,
+				"rate_to" 		=> $user_to,
+				"rate_number"	=> $rateValue
+			);
+
+		$where = array(
+				"rate_to" 		=> $user_to,
+				"rate_from"		=> $myid
+			);
+		$checkData = $this->common->getrow2('ratings_user', $where);
+		if(!empty($checkData))
+		{
+			$update = $this->common->change('ratings_user',$data, $where);
+			if($update == 1)
+			{
+				echo "success";
+			}
+			else
+			{
+				echo "fail";
+			}
+		}
+		else
+		{
+			$insert = $this->common->add('ratings_user',$data);
+			if($insert == 1)
+			{
+				echo "success";
+			}
+			else
+			{
+				echo "fail";
+			}
+		}
+    }
+	function submit_comment()
+	{
+		$data['user_info'] = $user_info = $this->session->userdata('user_info');
+		$myid = $user_info->subID;
+		$user_to			= $this->input->post('user_to');
+		$comment 			= $this->input->post('comment');
+
+		$data = array("comment" => $comment);
+		$where = array(
+				"rate_to" 		=> $user_to,
+				"rate_from"		=> $myid
+			);
+		$checkData = $this->common->getrow2('ratings_user', $where);
+		if(!empty($checkData))
+		{
+			$update = $this->common->change('ratings_user',$data, $where);
+			if($update == 1)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+		else
+		{
+			$insert = $this->common->add('ratings_user',$data);
+			if($insert == 1)
+			{
+				echo "1";
+			}
+			else
+			{
+				echo "0";
+			}
+		}
+	}
 }
