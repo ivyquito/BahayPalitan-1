@@ -507,7 +507,6 @@ INSERT INTO `subscribers` (`subID`, `profilepic`, `lname`, `fname`, `mname`, `ge
 
 --
 -- Table structure for table `travel_plan`
---
 
 CREATE TABLE IF NOT EXISTS `travel_plan` (
   `TravelPlanID` int(8) NOT NULL AUTO_INCREMENT,
@@ -517,6 +516,9 @@ CREATE TABLE IF NOT EXISTS `travel_plan` (
   `PEndDate` date NOT NULL,
   `locID` int(8) NOT NULL,
   `subID` int(8) NOT NULL,
+  `Lat` varchar(200) NOT NULL COMMENT 'google latitude',
+  `Long` varchar(200) NOT NULL COMMENT 'google longitude',
+  `GoogleAddr` varchar(200) NOT NULL COMMENT 'google address'
   PRIMARY KEY (`TravelPlanID`),
   KEY `subID` (`subID`),
   KEY `locID` (`locID`)

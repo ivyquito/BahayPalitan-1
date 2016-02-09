@@ -1,7 +1,7 @@
 
     <div style="padding-top:80px">
 		 <div class="container-fluid">
-				<div class="container-page">				
+				<div class="container-page">
 					<div class="col-md-offset-2 col-lg-8">
 						<div class="panel panel-default">
                         <div class="panel-heading">
@@ -17,10 +17,10 @@
                         <fieldset hidden>
                             <label>Latitude</label>
                             <input name="lat" id='lat' type="text" value="<?php echo $myplan->Lat; ?>">
-                          
+
                             <label>Longitude</label>
                             <input name="lng" id='lng' type="text" value="<?php echo $myplan->Long; ?>">
-                          
+
                             <label>Formatted Address</label>
                             <input name="formatted_address" id='f_address' type="text" value="<?php echo $myplan->GoogleAddr; ?>">
                         </fieldset>
@@ -31,7 +31,7 @@
                                 <div class="col-md-6">
                                     <label>Start Date</label>
                                     <div class="input-group date">
-                                        <input type="text" class="form-control" id='startdate' value="<?php echo $myplan->PStartDate; ?>">
+                                        <input type="text" class="form-control" id='startdate' value="<?php echo date('m/d/Y', strtotime($myplan->PStartDate)); ?>">
                                         <span class="input-group-addon">
                                           <i class="glyphicon glyphicon-calendar"></i>
                                         </span>
@@ -46,7 +46,7 @@
                                 <div class="col-md-6">
                                     <label>End Date</label>
                                     <div class="input-group date">
-                                        <input type="text" class="form-control" id='enddate' value="<?php echo $myplan->PEndDate; ?>">
+                                        <input type="text" class="form-control" id='enddate' value="<?php echo date('m/d/Y', strtotime($myplan->PEndDate)); ?>">
                                         <span class="input-group-addon">
                                           <i class="glyphicon glyphicon-calendar"></i>
                                         </span>
@@ -73,8 +73,8 @@
 
                         </div>
                         <!-- .panel-body -->
-						</div>			
-					</div>	
+						</div>
+					</div>
 				</div>
 		</div>
     </div>
@@ -181,20 +181,20 @@ $(document).ready(function(){
         draggable: true
       }
     });
-    
+
     $("#geocomplete").bind("geocode:dragged", function(event, latLng){
       $("input[name=lat]").val(latLng.lat());
       $("input[name=lng]").val(latLng.lng());
       $("#reset").show();
     });
-    
-    
+
+
     $("#reset").click(function(){
       $("#geocomplete").geocomplete("resetMarker");
       $("#reset").hide();
       return false;
     });
-    
+
     $("#find").click(function(){
       $("#geocomplete").trigger("geocode");
     }).click();

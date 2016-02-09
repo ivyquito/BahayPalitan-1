@@ -23,10 +23,10 @@ class user_page_travelplan extends CI_Controller {
 		if($this->session->userdata('user_info')==''){
 				redirect(base_url().'index.php/user_page_home');
 				exit();
-		}	
+		}
 		$data['user_info'] = $user_info = $this->session->userdata('user_info');
 		$uid = $user_info->subID;
-		$this->load->library('pagination'); 
+		$this->load->library('pagination');
 		$config = array();
 		$config["base_url"] = base_url() . "user_page_travelplan/travelplanrecord";
 		$total_row = sizeof($this->common->countalltravelplan($uid));
@@ -37,18 +37,18 @@ class user_page_travelplan extends CI_Controller {
 		$config['next_link'] = 'Next';
 		$config['prev_link'] = 'Previous';
 		$this->pagination->initialize($config);
-		
 
-		
+
+
 		$page 	= ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		$page 	= $config["per_page"] * $page;
         $data['records'] = $this->common->alltravelplan($config["per_page"], $page,$uid);
 		$data["links"] 	 = $this->pagination->create_links();
-		
+
 		$this->load->view('includes/head');
 		$this->load->view('includes/nav',$data);
 		$this->load->view('user_view_page_travelplanrecord');
-		$this->load->view('includes/footer2');	
+		$this->load->view('includes/footer2');
 		/*$data['user_info'] = $user_info = $this->session->userdata('user_info');
 
 		$check = $this->common->getrow('travel_plan', array('subID'=>$user_info->subID));
@@ -65,7 +65,7 @@ class user_page_travelplan extends CI_Controller {
 		$this->load->view('includes/nav',$data);
 		$this->load->view($page);
 		$this->load->view('includes/footer2');*/
-		
+
 	}
 	function add(){
 		if($this->session->userdata('user_info')==''){
@@ -90,7 +90,7 @@ class user_page_travelplan extends CI_Controller {
 			$current = date('Y-m-d');
 			$date 			= new DateTime($current);
 			$interval 		= new DateInterval('P1M');
-			
+
 			$date->add($interval);
 			$min_month 		= $date->format('Y-m-d');
 
@@ -127,7 +127,7 @@ class user_page_travelplan extends CI_Controller {
 
 		}
 
-		
+
 		$data['loc'] = $this->common->getall('locations',array('status'=>'active'));
 
 		$this->load->view('includes/head');
@@ -158,7 +158,7 @@ class user_page_travelplan extends CI_Controller {
 			$current = date('Y-m-d');
 			$date 			= new DateTime($current);
 			$interval 		= new DateInterval('P1M');
-			
+
 			$date->add($interval);
 			$min_month 		= $date->format('Y-m-d');
 
@@ -195,7 +195,7 @@ class user_page_travelplan extends CI_Controller {
 
 		}
 
-		
+
 		$data['loc'] = $this->common->getall('locations',array('status'=>'active'));
 
 		$this->load->view('includes/head');
@@ -221,7 +221,7 @@ class user_page_travelplan extends CI_Controller {
 			$current = date('Y-m-d');
 			$date 			= new DateTime($current);
 			$interval 		= new DateInterval('P1M');
-			
+
 			$date->add($interval);
 			$min_month 		= $date->format('Y-m-d');
 
@@ -258,7 +258,7 @@ class user_page_travelplan extends CI_Controller {
 		$this->load->view('includes/footer2');
 	}
 
-	function editTravel(){	
+	function editTravel(){
 		if($this->session->userdata('user_info')==''){
 				redirect(base_url().'index.php/user_page_home');
 				exit();
@@ -281,7 +281,7 @@ class user_page_travelplan extends CI_Controller {
 			$current = date('Y-m-d');
 			$date 			= new DateTime($current);
 			$interval 		= new DateInterval('P1M');
-			
+
 			$date->add($interval);
 			$min_month 		= $date->format('Y-m-d');
 
@@ -327,7 +327,7 @@ class user_page_travelplan extends CI_Controller {
 		}
 		$data['user_info'] = $user_info = $this->session->userdata('user_info');
 		$uid = $user_info->subID;
-		$this->load->library('pagination'); 
+		$this->load->library('pagination');
 		$config = array();
 		$config["base_url"] = base_url() . "user_page_travelplan/records";
 		$total_row = sizeof($this->common->countallplan($uid));
@@ -338,19 +338,19 @@ class user_page_travelplan extends CI_Controller {
 		$config['next_link'] = 'Next';
 		$config['prev_link'] = 'Previous';
 		$this->pagination->initialize($config);
-		
 
-		
+
+
 		$page 	= ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		$page 	= $config["per_page"] * $page;
         $data['records'] = $this->common->allplan($config["per_page"], $page,$uid);
 		$data["links"] 	 = $this->pagination->create_links();
-		
+
 		$this->load->view('includes/head');
 		$this->load->view('includes/nav',$data);
 		$this->load->view('user_view_page_travelrecord');
 		$this->load->view('includes/footer2');
-		
+
 	}
 	function travelplanrecord(){
 		if($this->session->userdata('user_info')==''){
@@ -359,7 +359,7 @@ class user_page_travelplan extends CI_Controller {
 		}
 		$data['user_info'] = $user_info = $this->session->userdata('user_info');
 		$uid = $user_info->subID;
-		$this->load->library('pagination'); 
+		$this->load->library('pagination');
 		$config = array();
 		$config["base_url"] = base_url() . "user_page_travelplan/travelplanrecord";
 		$total_row = sizeof($this->common->countalltravelplan($uid));
@@ -370,19 +370,19 @@ class user_page_travelplan extends CI_Controller {
 		$config['next_link'] = 'Next';
 		$config['prev_link'] = 'Previous';
 		$this->pagination->initialize($config);
-		
 
-		
+
+
 		$page 	= ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 		$page 	= $config["per_page"] * $page;
         $data['records'] = $this->common->alltravelplan($config["per_page"], $page,$uid);
 		$data["links"] 	 = $this->pagination->create_links();
-		
+
 		$this->load->view('includes/head');
 		$this->load->view('includes/nav',$data);
 		$this->load->view('user_view_page_travelplanrecord');
 		$this->load->view('includes/footer2');
-		
+
 	}
 
 
@@ -426,7 +426,7 @@ class user_page_travelplan extends CI_Controller {
 			'locID' 		=> $locID
 			);
 
-		
+
 		$sql = $this->system_model->addData('travel_plan', $param);
 
 		if($sql)
@@ -435,7 +435,7 @@ class user_page_travelplan extends CI_Controller {
 		}
 		else
 		{
-			echo $this->system_model->jsonret(false, 'An error occured!');	
+			echo $this->system_model->jsonret(false, 'An error occured!');
 		}
 	}
 
@@ -482,18 +482,26 @@ class user_page_travelplan extends CI_Controller {
 		}
 		else
 		{
-			echo $this->system_model->jsonret(false, 'An error occured!');	
+			echo $this->system_model->jsonret(false, 'An error occured!');
 		}
 	}
 
 
 	public function pullTravelPlan()
 	{
-		$data['user_info'] = $user_info = $this->session->userdata('user_info');
+		$user_info = $this->session->userdata('user_info');
 
 		$sql = $this->system_model->get_all('travel_plan', '*', array('subID' => $user_info->subID));
 
-		echo json_encode($sql);
+		foreach ($sql as $row) {
+			$fetch[] = array(	'GoogleAddr'	=> $row->GoogleAddr,
+											 	'PStartDate'	=> $row->PStartDate,
+											 	'PEndDate'		=> date('Y-m-d', strtotime($row->PEndDate . '+1 day')),
+												'TravelPlanID'=> $row->TravelPlanID,
+												'subID'				=> $row->subID);
+		}
+
+		echo json_encode($fetch);
 	}
-	
+
 }
